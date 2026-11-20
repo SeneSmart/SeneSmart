@@ -1,209 +1,246 @@
 # SeneSmart API Specification
 
-Version: 1.0
-Status: Proposed — Frontend Development
+**Version:** 2.0
+**Status:** Proposed — for hardware team review
+**Architecture:** Local ESP32 communication
 
-## 1. Purpose
+## 1. Overview
 
-This document defines how SeneSmart devices will exchange sensor readings
-and pump-control commands with the future backend.
+This document defines the proposed communication interface between the SeneSmart frontend running on an Android phone and the ESP32 irrigation controller.
 
-The frontend is currently UI-only. These endpoints are specifications,
-not implemented API routes.
+The ESP32 is responsible for:
+- Reading and processing sensor data.
+- Controlling the irrigation pump through a relay.
+- Managing irrigation automation.
+- Running Sene AI locally.
+- Providing sensor readings and device status to the frontend.
 
-## 2. Device Identification
+The Android phone provides the user interface and communicates with the ESP32 over a local Wi-Fi connection.
 
-Every device must have a unique ID.
+These endpoints are proposals. They are not implemented yet.
+
+## 2. System Architecture
+
+1. Android phone — displays the SeneSmart interface.
+2. ESP32 — processes sensor readings, pump commands and local AI requests.
+3. Sensors — measure farm and environmental conditions.
+4. Relay and pump — control water delivery.
+
+## 3. Base URL
+
+The ESP32 will host the local API.
 
 Example:
-SEN-001
 
-## 3. Sensor Readings
+    http://192.168.4.1/api/v1
 
-### Endpoint
+The actual IP address and network configuration must be agreed upon by the hardware team.
 
-POST /api/v1/sensors/readings
+## 4. Sensor Readings
 
-### Content-Type
+### GET /sensors/readings/latest
 
-application/json
+Returns the latest available sensor readings.
 
-### Example request
+Example response:
 
-{
-  "device_id": "SEN-001",
-  "timestamp": "2026-11-20T12:30:00Z",
-  "sensors": {
-    "soil_moisture": 68.5,
-    "temperature": 27.4,
-    "humidity": 72.0,
-    "water_level": 85.0,
-    "soil_ph": 6.5
-  }
-}
+    {
+      "device_id": "SEN-001",
+      "soil_moisture": 68.5,
+      "temperature": 27.4,
+      "humidity": 72,
+      "water_level": 85,
+      "soil_ph": 6.5,
+      "timestamp": "2026-11-20T16:00:00Z"
+    }
 
-### Sensor fields
-
-| Field | Data type | Unit |
-|---|---|---|
-| soil_moisture | number | % |
-| temperature | number | °C |
-| humidity | number | % |
-| water_level | number | % |
-| soil_ph | number | pH |
-
-These are proposed fields. Confirm actual sensor hardware before
-finalizing the device implementation.
-
-### Example success response
-
-{
-  "success": true,
-  "message": "Readings received",
-  "device_id": "SEN-001"
-}
-
-## 4. Latest Sensor Readings
-
-### Endpoint
-
-GET /api/v1/devices/SEN-001/readings/latest
-
-### Example response
-
-{
-  "success": true,
-  "device_id": "SEN-001",
-  "timestamp": "2026-11-20T12:30:00Z",
-  "sensors": {
-    "soil_moisture": 68.5,
-    "temperature": 27.4,
-    "humidity": 72.0,
-    "water_level": 85.0,
-    "soil_ph": 6.5
-  }
-}
+All measurement values are examples. Actual units, calibration and supported ranges must be confirmed by the hardware team.
 
 ## 5. Device Status
 
-### Endpoint
+### GET /device/status
 
-GET /api/v1/devices/SEN-001/status
+Returns the current ESP32 and irrigation system status.
 
-### Example response
+Example response:
 
-{
-  "device_id": "SEN-001",
-  "connection_status": "online",
-  "last_seen": "2026-11-20T12:30:00Z"
-}
-
-Possible connection statuses:
-- online
-- offline
+    {
+      "device_id": "SEN-001",
+      "connected": true,
+      "pump_state": "OFF",
+      "automation_enabled": false,
+      "ai_available": true
+    }
 
 ## 6. Pump Control
 
-### Retrieve pending commands
+### POST /pump/control
 
-GET /api/v1/devices/SEN-001/commands
+Sends a pump control command to the ESP32.
 
-### Example response
+Example request:
 
-{
-  "success": true,
-  "commands": [
     {
       "command_id": "CMD-001",
-      "command": "PUMP_CONTROL",
       "state": "ON"
     }
-  ]
-}
 
-### Pump states
+Example response:
+
+    {
+      "success": true,
+      "command_id": "CMD-001",
+      "requested_state": "ON",
+      "actual_state": "ON",
+      "execution_status": "completed"
+    }
+
+Supported states:
 
 - ON
 - OFF
 
-### Command acknowledgement
+The ESP32 must report the actual pump state rather than assuming that every command succeeded.
 
-POST /api/v1/devices/SEN-001/commands/ack
+## 7. Irrigation Automation
 
-### Example request
+The frontend is intended to support:
 
-{
-  "command_id": "CMD-001",
-  "device_id": "SEN-001",
-  "execution_status": "success",
-  "actual_pump_state": "ON"
-}
+- Scheduled irrigation.
+- Soil moisture start and stop thresholds.
+- Low-water protection.
 
-Possible execution statuses:
-- success
-- failed
+The hardware team must define how these settings will be stored, validated and applied by the ESP32.
 
-The backend must distinguish between a requested pump state and
-the actual pump state reported by the Arduino.
+A proposed endpoint is:
 
-## 7. API Authentication
+### POST /automation/settings
 
-All device requests must use device authentication.
+Example request:
 
-Proposed header:
+    {
+      "schedule_enabled": true,
+      "start_time": "06:00",
+      "stop_time": "06:30",
+      "moisture_enabled": true,
+      "moisture_start": 35,
+      "moisture_stop": 65,
+      "low_water_protection": true
+    }
 
-Authorization: Bearer DEVICE_TOKEN
+This endpoint is proposed and requires hardware team approval.
 
-The actual token must be securely provisioned for each device.
-Never hardcode production secrets into public source code.
+## 8. Sene AI
 
-## 8. Data Validation
+Sene AI is intended to run locally on the ESP32 without depending on a cloud AI service.
 
-The backend should:
-- Verify device identity and authentication.
-- Validate required fields and data types.
-- Reject invalid sensor readings.
-- Record the timestamp of each reading.
-- Track the last successful device communication.
-- Validate pump commands before delivering them.
+### POST /assistant/query
 
-## 9. Communication Expectations
+Sends a text question to Sene AI.
 
-Proposed initial sensor reporting interval: 5 seconds.
+Example request:
 
-The backend should:
-- Accept repeated sensor updates.
-- Track offline devices.
-- Avoid treating an unacknowledged command as successful.
-- Report actual pump state separately from requested state.
+    {
+      "question": "Why is my soil moisture low?"
+    }
 
-## 10. Development Responsibilities
+Example response:
 
-### Arduino C Developer
-- Read physical sensors.
-- Convert readings into the agreed units.
-- Format readings as JSON.
-- Send readings to the API.
-- Retrieve and execute authorized pump commands.
-- Report command execution results.
+    {
+      "success": true,
+      "answer": "The soil moisture reading is low. Check the irrigation supply and soil conditions.",
+      "source": "local_sene_ai"
+    }
 
-### Backend Developer
-- Implement the endpoints in this specification.
-- Authenticate devices.
-- Store readings.
-- Manage pump commands and acknowledgements.
-- Provide data to the frontend.
+The ESP32 team must determine the AI model, supported questions, memory requirements and response format.
 
-### Frontend Developer
-- Display sensor readings.
-- Display device connection status.
-- Display pump state.
-- Provide pump controls.
-- Show errors and stale readings.
-- Use demonstration data until the backend is available.
+## 9. Voice Assistant
 
-## 11. Important
+Proposed voice interaction:
 
-This document is a proposed interface contract.
-Sensor fields, hardware limits, communication protocol, and reporting
-frequency must be confirmed with the Arduino developer before production.
+1. The user speaks through the phone microphone.
+2. The phone converts speech into text using an agreed speech-recognition method.
+3. The text question is sent to the ESP32.
+4. Sene AI processes the question locally.
+5. The ESP32 returns a text response.
+6. The phone reads the response aloud using text-to-speech.
+
+The exact voice-processing responsibilities and offline capabilities must be agreed upon by both teams.
+
+## 10. Communication
+
+The initial proposal is HTTP over the local Wi-Fi network.
+
+The frontend may request updated sensor readings periodically. A five-second interval is a starting proposal, not a fixed requirement.
+
+The hardware team may recommend WebSockets or another suitable method.
+
+## 11. Error Responses
+
+Example:
+
+    {
+      "success": false,
+      "error": "DEVICE_UNAVAILABLE",
+      "message": "The irrigation controller is not responding."
+    }
+
+Suggested error categories:
+
+- DEVICE_UNAVAILABLE
+- INVALID_REQUEST
+- SENSOR_ERROR
+- PUMP_CONTROL_FAILED
+- AI_UNAVAILABLE
+
+## 12. Security
+
+The hardware team should define:
+
+- Device authentication.
+- Access control for pump commands.
+- Protection against unauthorized local network access.
+- Safe handling of invalid or repeated commands.
+
+## 13. Hardware Team Responsibilities
+
+The hardware team is responsible for:
+
+- ESP32 firmware.
+- Sensor acquisition and calibration.
+- Relay and pump control.
+- Irrigation automation.
+- Local Sene AI.
+- Local API implementation.
+- Communication and security.
+
+## 14. Frontend Team Responsibilities
+
+The frontend team is responsible for:
+
+- Mobile-friendly SeneSmart interface.
+- Sensor visualization.
+- Pump controls.
+- Automation settings interface.
+- Farm map and sensor indicators.
+- Ask Sene AI interface.
+- Microphone and spoken response interface.
+- Integration with the agreed ESP32 API.
+
+## 15. Items Requiring Team Agreement
+
+Before implementation, both teams must confirm:
+
+1. ESP32 Wi-Fi configuration and IP address.
+2. Sensor names, units and measurement ranges.
+3. API endpoint names and JSON formats.
+4. HTTP polling or WebSocket communication.
+5. Pump safety and command acknowledgement.
+6. Automation settings and execution rules.
+7. Local Sene AI capabilities.
+8. Voice recognition and text-to-speech responsibilities.
+9. Authentication and network security.
+
+---
+
+**SeneSmart — Smart Irrigation and Agricultural Monitoring System**
