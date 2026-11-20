@@ -1,0 +1,1645 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  font-family: 'DM Sans', sans-serif;
+  color: #17291e;
+  background: #f5f7f5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button { font: inherit; cursor: pointer; }
+
+.app { min-height: 100vh; padding-bottom: 100px; }
+
+.topbar {
+  height: 72px;
+  padding: 0 max(6%, calc((100% - 1100px) / 2));
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #edf0ed;
+}
+
+.topbar img { width: 150px; max-height: 53px; object-fit: contain; }
+
+.demo-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: #fff5df;
+  color: #9a701d;
+  padding: 8px 12px;
+  border-radius: 30px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .5px;
+}
+
+.demo-pill span, .reading-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #e3a62c;
+}
+
+.content { width: 90%; max-width: 1050px; margin: 32px auto; }
+
+.welcome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.eyebrow {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  color: #849487;
+}
+
+h1 { font-size: 29px; margin: 7px 0 4px; letter-spacing: -1px; }
+.welcome p, .section-title p { margin: 0; font-size: 12px; color: #8b978e; }
+
+.device-card {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: white;
+  border: 1px solid #e9eee9;
+  padding: 11px 15px;
+  border-radius: 14px;
+}
+
+.device-icon, .status-icon, .sensor-icon, .pump-icon, .big-pump-icon, .settings-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 12px;
+}
+
+.device-icon { width: 40px; height: 40px; }
+.connected { background: #e8f6ec; color: #21844c; }
+.disconnected { background: #fff0ed; color: #c14d43; }
+.device-card small, .device-card strong { display: block; }
+.device-card small { color: #89958d; font-size: 10px; }
+.device-card strong { font-size: 12px; margin-top: 4px; }
+
+.green-text { color: #21844c !important; }
+.red-text { color: #c14d43 !important; }
+.muted { color: #89958d !important; }
+
+.card {
+  background: white;
+  border: 1px solid #e9eee9;
+  border-radius: 17px;
+  box-shadow: 0 3px 12px rgba(25, 55, 35, .025);
+}
+
+.quick-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 17px;
+  margin-bottom: 28px;
+}
+
+.status-left { display: flex; align-items: center; gap: 12px; }
+.status-icon { width: 39px; height: 39px; }
+.status-left strong { font-size: 12px; }
+.status-left p { font-size: 10px; color: #89958d; margin: 4px 0 0; }
+
+.icon-button {
+  border: 0;
+  background: #f3f6f3;
+  color: #68786c;
+  border-radius: 10px;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.section-title h2 { font-size: 17px; margin: 0 0 4px; }
+.sample-label {
+  color: #a0782d;
+  background: #fff5e2;
+  border-radius: 20px;
+  padding: 7px 10px;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.sensor-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.sensor-card { padding: 17px; min-width: 0; }
+
+.sensor-icon { width: 43px; height: 43px; margin-bottom: 14px; }
+.blue { color: #3283d4; background: #eaf3ff; }
+.orange { color: #d88738; background: #fff1e4; }
+.purple { color: #8a69c9; background: #f2edff; }
+.cyan { color: #2999a7; background: #e8f8f8; }
+.green { color: #368b55; background: #eaf6ed; }
+
+.sensor-card > p { font-size: 11px; color: #89958d; margin: 0 0 7px; }
+.sensor-value { font-size: 27px; font-weight: 800; letter-spacing: -1px; }
+.sensor-value span { font-size: 12px; color: #87938a; margin-left: 4px; font-weight: 600; }
+
+.sensor-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  color: #a0aaa2;
+  margin-top: 11px;
+}
+
+.reading-dot { width: 6px; height: 6px; background: #39a96a; }
+
+.pump-title { margin-top: 30px; }
+
+.text-button {
+  display: flex;
+  align-items: center;
+  border: 0;
+  background: transparent;
+  color: #25804c;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.pump-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 16px;
+}
+
+.pump-icon { width: 45px; height: 45px; background: #f0f5ef; color: #647d68; }
+.pump-active { background: #e8f6ec !important; color: #21844c !important; }
+
+.pump-details { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+.pump-details strong { font-size: 12px; }
+.pump-details span { font-size: 10px; font-weight: 700; }
+
+.switch {
+  width: 49px;
+  height: 28px;
+  padding: 3px;
+  border: 0;
+  border-radius: 20px;
+  background: #dce2dc;
+  transition: background .2s;
+}
+
+.switch span {
+  display: block;
+  width: 22px;
+  height: 22px;
+  background: white;
+  border-radius: 50%;
+  transition: transform .2s;
+}
+
+.switch-on { background: #269253; }
+.switch-on span { transform: translateX(21px); }
+
+.pump-page { max-width: 600px; margin: auto; }
+
+.pump-control-card {
+  padding: 35px 22px;
+  text-align: center;
+}
+
+.big-pump-icon {
+  width: 82px;
+  height: 82px;
+  margin: 0 auto 20px;
+  background: #f0f4f0;
+  color: #647d68;
+  border-radius: 25px;
+}
+
+.pump-control-card h2 { font-size: 23px; margin: 9px 0 5px; }
+.pump-control-card > p { font-size: 11px; }
+
+.pump-status {
+  display: table;
+  margin: 22px auto;
+  padding: 9px 14px;
+  border-radius: 30px;
+  background: #f0f2f0;
+  color: #7d8980;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.pump-status span {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: currentColor;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.status-running { background: #e8f6ec; color: #21844c; }
+
+.control-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  max-width: 290px;
+  margin: 0 auto;
+  padding: 14px;
+  border: 0;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.button-start { background: #21844c; color: white; }
+.button-stop { background: #fff0ed; color: #c14d43; }
+.demo-note { color: #a0aaa2; margin-top: 17px; }
+
+.device-settings {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  margin-top: 15px;
+}
+
+.settings-icon { width: 40px; height: 40px; background: #eff4ef; color: #64816b; }
+.device-settings div:nth-child(2) { flex: 1; }
+.device-settings strong { font-size: 12px; }
+.device-settings p { font-size: 10px; color: #89958d; margin: 4px 0 0; }
+
+.warning {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff5e4;
+  color: #936b23;
+  padding: 12px;
+  border-radius: 11px;
+  margin-bottom: 18px;
+  font-size: 11px;
+}
+
+.developer-tools { margin-top: 24px; }
+.developer-tools button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  background: transparent;
+  color: #87938a;
+  font-size: 10px;
+  padding: 8px 0;
+}
+
+.bottom-nav {
+  position: fixed;
+  z-index: 5;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 65px;
+  background: rgba(255,255,255,.97);
+  border-top: 1px solid #e9eee9;
+}
+
+.bottom-nav button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  border: 0;
+  background: transparent;
+  color: #9aa49c;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.bottom-nav button.nav-active { color: #21844c; }
+
+@media (max-width: 600px) {
+  .topbar { height: 65px; padding: 0 5%; }
+  .topbar img { width: 125px; }
+  .content { width: 91%; margin: 25px auto; }
+  h1 { font-size: 25px; }
+  .sensor-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .sensor-card { padding: 14px; }
+  .sensor-value { font-size: 24px; }
+  .bottom-nav { gap: 55px; }
+}
+
+@media (max-width: 350px) {
+  .sensor-grid { grid-template-columns: 1fr; }
+}
+
+/* ==================================
+   SENESMART AUTOMATION TAB
+================================== */
+
+.automation-page {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-bottom: 12px;
+}
+
+.automation-summary,
+.automation-manual {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.automation-summary {
+  padding: 15px;
+}
+
+.automation-summary-icon,
+.automation-manual-icon {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  color: #16834a;
+  background: #e9f7ef;
+}
+
+.automation-summary strong,
+.automation-manual strong {
+  display: block;
+  font-size: 13px;
+  color: #183b2b;
+}
+
+.automation-summary p,
+.automation-manual p {
+  margin: 4px 0 0;
+  color: #819087;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.automation-status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #b8c5bd;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.automation-status-dot.active {
+  background: #20a464;
+  box-shadow: 0 0 0 4px #e5f6ec;
+}
+
+.automation-section-title {
+  margin: 5px 0 0;
+}
+
+.automation-card {
+  padding: 15px;
+  border-radius: 16px;
+}
+
+.automation-heading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.automation-icon {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+}
+
+.schedule-icon {
+  background: #edf2ff;
+  color: #5874c8;
+}
+
+.moisture-icon {
+  background: #e7f5ff;
+  color: #1687c4;
+}
+
+.safety-icon {
+  background: #e9f7ef;
+  color: #16834a;
+}
+
+.automation-heading-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.automation-heading-text strong {
+  display: block;
+  color: #203b2d;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.automation-heading-text p {
+  margin: 4px 0 0;
+  color: #849087;
+  font-size: 11px;
+}
+
+.automation-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 19px;
+}
+
+.automation-field label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #617267;
+}
+
+.automation-field input {
+  width: 100%;
+  min-width: 0;
+  height: 43px;
+  padding: 0 9px;
+  border: 1px solid #e1eae4;
+  border-radius: 10px;
+  background: #f9fcfa;
+  color: #234a34;
+  font: inherit;
+  font-size: 13px;
+}
+
+.automation-fields input:focus {
+  outline: 2px solid #a9dfbd;
+  border-color: #36a66a;
+}
+
+.automation-hint {
+  margin: 13px 0 0;
+  color: #89968e;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.fields-disabled {
+  opacity: 0.42;
+}
+
+.threshold-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 19px;
+  gap: 8px;
+}
+
+.threshold-row label {
+  color: #63736a;
+  font-size: 11px;
+}
+
+.threshold-row strong {
+  color: #16834a;
+  font-size: 14px;
+}
+
+.moisture-slider {
+  display: block;
+  width: 100%;
+  height: 6px;
+  margin: 13px 0 5px;
+  accent-color: #24965a;
+  cursor: pointer;
+}
+
+.moisture-slider:disabled {
+  cursor: not-allowed;
+}
+
+.automation-manual {
+  padding: 14px;
+  background: #f5faf6;
+}
+
+.automation-demo-note {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 2px;
+  color: #89968e;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.automation-demo-note svg {
+  flex-shrink: 0;
+}
+
+.bottom-nav button {
+  flex: 1;
+  min-width: 0;
+}
+
+.bottom-nav button span {
+  font-size: 10px;
+}
+
+@media (max-width: 350px) {
+  .automation-card {
+    padding: 12px;
+  }
+
+  .automation-heading {
+    gap: 8px;
+  }
+
+  .automation-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .automation-heading-text strong {
+    font-size: 12px;
+  }
+}
+
+/* SENESMART SAMPLE FARM MAP */
+.farm-map-page {
+  display:flex;
+  flex-direction:column;
+  gap:13px;
+  padding-bottom:14px;
+}
+.map-summary {
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:14px;
+}
+.map-summary-icon,.selected-sensor-icon {
+  width:40px;
+  height:40px;
+  flex:0 0 40px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  color:#21844c;
+  background:#eaf6ee;
+}
+.map-summary strong,.selected-sensor-name strong {
+  display:block;
+  color:#26372c;
+  font-size:13px;
+}
+.map-summary p {
+  margin:4px 0 0;
+  color:#849087;
+  font-size:11px;
+}
+.map-summary .sample-label { margin-left:auto; }
+.farm-map {
+  position:relative;
+  overflow:hidden;
+  padding:17px 13px 48px;
+  min-height:330px;
+  background:#edf4e9;
+}
+.map-compass {
+  position:absolute;
+  top:10px;
+  right:13px;
+  color:#54735a;
+  font-size:13px;
+  font-weight:800;
+}
+.map-compass span { font-size:9px; }
+.farm-map-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:11px;
+  padding:26px 8px 0;
+}
+.farm-plot {
+  position:relative;
+  min-height:112px;
+  overflow:hidden;
+  border:2px solid #8bb68a;
+  border-radius:13px;
+  background:repeating-linear-gradient(135deg,#d9ebcf 0,#d9ebcf 8px,#cde3c1 8px,#cde3c1 16px);
+  padding:10px;
+}
+.plot-c {
+  grid-column:1 / 3;
+  min-height:92px;
+}
+.plot-name,.plot-crop {
+  position:relative;
+  z-index:1;
+  display:block;
+}
+.plot-name {
+  color:#315e39;
+  font-size:11px;
+  font-weight:800;
+}
+.plot-crop {
+  margin-top:3px;
+  color:#628064;
+  font-size:10px;
+}
+.crop-lines {
+  position:absolute;
+  inset:43px 8px 8px;
+  opacity:.48;
+  background:repeating-linear-gradient(0deg,transparent 0 9px,#78a76e 10px 12px);
+}
+.sensor-marker {
+  position:absolute;
+  z-index:2;
+  top:50%;
+  left:68%;
+  width:34px;
+  height:34px;
+  transform:translate(-50%,-50%);
+  display:grid;
+  place-items:center;
+  border:3px solid white;
+  border-radius:50%;
+  background:#238b50;
+  color:white;
+  box-shadow:0 2px 8px rgba(30,80,43,.28);
+  font-size:9px;
+  font-weight:800;
+  cursor:pointer;
+}
+.marker-two { left:35%; top:63%; }
+.marker-three { left:72%; top:58%; }
+.sensor-marker.marker-selected {
+  outline:3px solid rgba(35,139,80,.25);
+  transform:translate(-50%,-50%) scale(1.12);
+}
+.sensor-marker.marker-offline { background:#d65353; }
+.map-path {
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:35px;
+  height:16px;
+  border-top:2px dashed #c4b994;
+  border-bottom:2px dashed #c4b994;
+  background:#e8dfc8;
+}
+.map-path span {
+  position:absolute;
+  right:14px;
+  top:17px;
+  color:#8c8063;
+  font-size:9px;
+}
+.map-water {
+  position:absolute;
+  bottom:8px;
+  left:14px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  color:#4c8294;
+  font-size:10px;
+}
+.map-water span {
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#58b8d4;
+}
+.map-legend {
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:8px;
+  color:#758178;
+  font-size:9px;
+}
+.map-legend span {
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+.legend-dot {
+  width:8px;
+  height:8px;
+  border-radius:50%;
+}
+.legend-online { background:#238b50; }
+.legend-offline { background:#d65353; }
+.legend-plot {
+  width:9px;
+  height:9px;
+  border-radius:2px;
+  background:#cde3c1;
+  border:1px solid #8bb68a;
+}
+.selected-sensor { padding:14px; }
+.selected-sensor-top {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.selected-sensor-name {
+  min-width:0;
+  flex:1;
+}
+.selected-sensor-name small {
+  display:block;
+  margin-bottom:4px;
+  color:#87948a;
+  font-size:8px;
+  font-weight:700;
+}
+.sensor-state {
+  display:flex;
+  align-items:center;
+  gap:5px;
+  font-size:10px;
+  font-weight:700;
+  color:#238b50;
+}
+.sensor-state i {
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:currentColor;
+}
+.sensor-state.offline { color:#d65353; }
+.selected-sensor-reading {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px solid #edf0ed;
+}
+.selected-sensor-reading small {
+  display:block;
+  margin-bottom:4px;
+  color:#8a958d;
+  font-size:10px;
+}
+.selected-sensor-reading strong {
+  color:#2c3b30;
+  font-size:14px;
+}
+.map-demo-note {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin:0;
+  color:#89938b;
+  font-size:10px;
+}
+.bottom-nav { gap:0; }
+.bottom-nav button { padding:8px 2px; }
+
+@media (max-width:360px) {
+  .farm-map { padding-left:8px; padding-right:8px; }
+  .farm-map-grid { gap:7px; padding-left:3px; padding-right:3px; }
+}
+
+/* Five sensor marker positions */
+.marker-one { left: 68%; top: 50%; }
+.marker-two { left: 30%; top: 73%; }
+.marker-three { left: 68%; top: 58%; }
+.marker-four.water-marker {
+  left: 22%;
+  top: auto;
+  bottom: 8px;
+  transform: none;
+}
+.marker-five { left: 72%; top: 58%; }
+
+/* Simple irregular farm map */
+.simple-map-page {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.simple-map-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.simple-map-heading h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.simple-map-heading p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--text-muted, #84918a);
+}
+
+.simple-map-card {
+  padding: 12px;
+  overflow: hidden;
+}
+
+.simple-map-area {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 340px;
+  margin: 0 auto;
+}
+
+.farm-boundary {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.farm-boundary-fill {
+  fill: rgba(67, 160, 100, 0.10);
+  stroke: none;
+}
+
+.farm-boundary-line {
+  fill: none;
+  stroke: #398b59;
+  stroke-width: 3;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.simple-sensor-marker {
+  position: absolute;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  border: 0;
+  background: transparent;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.simple-marker-dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 1px 6px rgba(0,0,0,.25);
+}
+
+.simple-sensor-marker.online .simple-marker-dot {
+  background: #20a45a;
+}
+
+.simple-sensor-marker.offline .simple-marker-dot {
+  background: #dc4545;
+}
+
+.simple-sensor-marker.active .simple-marker-dot {
+  width: 20px;
+  height: 20px;
+  outline: 3px solid rgba(32,164,90,.22);
+}
+
+.simple-marker-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: #244b35;
+  background: white;
+  border-radius: 5px;
+  padding: 2px 5px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.12);
+}
+
+.simple-map-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid var(--border, #e7ece8);
+  padding-top: 12px;
+  font-size: 11px;
+  color: var(--text-muted, #84918a);
+}
+
+.simple-map-footer span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.simple-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.simple-status-dot.online {
+  background: #20a45a;
+}
+
+.simple-status-dot.offline {
+  background: #dc4545;
+}
+
+.simple-selected-sensor {
+  padding: 14px;
+}
+
+.simple-map-note {
+  margin: 0;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted, #84918a);
+}
+
+/* Farmer-friendly map labels */
+.simple-sensor-marker {
+  min-width: 0;
+  max-width: 112px;
+}
+
+.simple-marker-icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid white;
+  border-radius: 50%;
+  background: #20a45a;
+  color: white;
+  box-shadow: 0 2px 7px rgba(0,0,0,.2);
+}
+
+.simple-sensor-marker.offline .simple-marker-icon {
+  background: #dc4545;
+}
+
+.simple-marker-label {
+  white-space: normal;
+  text-align: center;
+  line-height: 1.2;
+  font-size: 9px;
+  font-weight: 800;
+  max-width: 108px;
+  color: #244b35;
+  padding: 4px 6px;
+  border: 1px solid #e3ebe5;
+}
+
+.farmer-reading-message {
+  margin: 12px 0 0;
+  padding: 10px;
+  text-align: center;
+  border-radius: 9px;
+  background: #edf7ef;
+  color: #267343;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* Farmer-friendly sensor conditions on Overview */
+.sensor-condition {
+  display: block;
+  width: 100%;
+  margin-top: 9px;
+  padding: 9px 5px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.sensor-condition.good {
+  background: #e8f6ec;
+  color: #238148;
+}
+
+.sensor-condition.warning {
+  background: #fff4dc;
+  color: #a66a08;
+}
+
+.sensor-condition.danger {
+  background: #fde9e8;
+  color: #c03935;
+}
+
+/* Circular sensor readings */
+.sensor-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.sensor-card-title {
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.sensor-gauge {
+  position: relative;
+  width: 92px;
+  height: 92px;
+}
+
+.sensor-gauge svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  overflow: visible;
+}
+
+.sensor-gauge circle {
+  fill: none;
+  stroke-width: 7;
+}
+
+.gauge-track {
+  stroke: #e8eee9;
+}
+
+.gauge-progress {
+  stroke-linecap: round;
+  transition: stroke-dasharray .3s ease;
+}
+
+.sensor-gauge.good .gauge-progress {
+  stroke: #238b50;
+}
+
+.sensor-gauge.warning .gauge-progress,
+.sensor-gauge.danger .gauge-progress {
+  stroke: #d93636;
+}
+
+.gauge-reading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: #263b30;
+}
+
+.gauge-reading strong {
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.gauge-reading span {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.sensor-condition {
+  width: 100%;
+  font-size: 10px;
+  font-weight: 800;
+  text-align: center;
+  padding: 7px 3px;
+  border-radius: 7px;
+}
+
+.sensor-condition.good {
+  background: #e6f5eb;
+  color: #238148;
+}
+
+.sensor-condition.warning,
+.sensor-condition.danger {
+  background: #fde9e8;
+  color: #c03935;
+}
+
+/* Top-centred Sene AI button */
+.topbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.sene-ai-button {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 13px;
+  border: 1px solid #cce8d3;
+  border-radius: 30px;
+  background: #eaf7ee;
+  color: #247b43;
+  font-size: 11px;
+  font-weight: 750;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.sene-ai-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.sene-ai-button:active {
+  transform: translateX(-50%) scale(.96);
+}
+
+/* Enhanced Speak with Sene button */
+.sene-ai-button {
+  top: 12px;
+  padding: 11px 17px;
+  gap: 9px;
+  font-size: 13px;
+  font-weight: 900;
+  border-radius: 30px;
+  border: 1px solid #b9dfc4;
+  box-shadow: 0 2px 7px rgba(35, 129, 72, 0.12);
+}
+
+.sene-ai-icon {
+  font-size: 19px;
+}
+
+.sene-ai-mic {
+  width: 19px;
+  height: 19px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Centre logo with Sene AI button underneath */
+.topbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding-top: 12px;
+  padding-bottom: 14px;
+}
+
+.topbar > img {
+  align-self: center;
+}
+
+.sene-ai-button {
+  position: static;
+  left: auto;
+  top: auto;
+  transform: none;
+  align-self: center;
+  margin: 0 auto;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.sene-ai-button:active {
+  transform: scale(.96);
+}
+
+/* Restore SeneSmart logo to its original left position */
+.topbar {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0;
+  padding-top: 12px;
+  padding-bottom: 14px;
+}
+
+.topbar > img {
+  align-self: auto;
+}
+
+.sene-ai-button {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  margin-top: 8px;
+}
+
+.sene-ai-button:active {
+  transform: translateX(-50%) scale(.96);
+}
+
+/* Premium Sene AI assistant button */
+.sene-ai-button {
+  min-width: 210px;
+  padding: 13px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  border: 1px solid #83d6a0;
+  border-radius: 40px;
+  background: linear-gradient(135deg, #e2f9e9 0%, #b9edca 50%, #dff8e7 100%);
+  color: #126b35;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: .2px;
+  box-shadow: 0 4px 13px rgba(30, 140, 72, .18);
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.sene-ai-button::after {
+  content: "AI";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 7px;
+  border-radius: 12px;
+  background: #198647;
+  color: white;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.sene-ai-button:hover {
+  background: linear-gradient(135deg, #c9f3d5, #91dfad);
+  box-shadow: 0 6px 17px rgba(30, 140, 72, .25);
+}
+
+.sene-ai-button:active {
+  transform: translateX(-50%) scale(.96);
+}
+
+.sene-ai-mic svg {
+  width: 21px;
+  height: 21px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  fill: none;
+}
+
+/* Separate voice and AI assistant controls */
+.sene-assistant-actions {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  margin-top: 9px;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 10px;
+  width: max-content;
+  max-width: calc(100vw - 24px);
+}
+
+.sene-speak-button,
+.sene-ask-button {
+  min-height: 58px;
+  border-radius: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(20, 90, 50, .13);
+  transition: transform .2s, box-shadow .2s;
+}
+
+.sene-speak-button {
+  min-width: 145px;
+  background: linear-gradient(145deg, #087d42, #20a65e);
+  color: white;
+  border: 1px solid #087d42;
+}
+
+.sene-speak-icon {
+  width: 35px;
+  height: 35px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.19);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sene-speak-icon svg {
+  width: 29px;
+  height: 29px;
+  stroke: white;
+  stroke-width: 2.5;
+}
+
+.sene-ask-button {
+  min-width: 145px;
+  background: linear-gradient(145deg, #effaf2, #d8f3e1);
+  color: #126b35;
+  border: 1px solid #a8dfb9;
+}
+
+.sene-ask-icon {
+  font-size: 25px;
+  color: #168c4b;
+}
+
+.sene-ai-tag {
+  font-size: 9px;
+  font-weight: 900;
+  background: #168c4b;
+  color: white;
+  padding: 4px 6px;
+  border-radius: 7px;
+}
+
+.sene-speak-button:active,
+.sene-ask-button:active {
+  transform: scale(.96);
+}
+
+@media (max-width: 360px) {
+  .sene-speak-button,
+  .sene-ask-button {
+    min-width: 0;
+    padding: 9px 11px;
+    font-size: 11px;
+    gap: 6px;
+  }
+}
+
+/* Truly separate microphone and AI question buttons */
+.sene-assistant-actions {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 14px !important;
+}
+
+.sene-speak-button {
+  width: 64px !important;
+  min-width: 64px !important;
+  height: 64px !important;
+  min-height: 64px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  flex: 0 0 64px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.sene-speak-button .sene-button-text {
+  display: none !important;
+}
+
+.sene-speak-icon {
+  width: 100% !important;
+  height: 100% !important;
+  background: transparent !important;
+}
+
+.sene-speak-icon svg {
+  width: 34px !important;
+  height: 34px !important;
+  stroke-width: 2.7 !important;
+}
+
+.sene-ask-button {
+  min-width: 155px !important;
+  min-height: 58px !important;
+  border-radius: 18px !important;
+}
+
+/* Sene AI chat window */
+.sene-chat-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(12, 35, 22, .38);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 14px;
+}
+
+.sene-chat-window {
+  width: 100%;
+  max-width: 440px;
+  height: min(590px, 82dvh);
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 12px 45px rgba(0,0,0,.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sene-chat-header {
+  padding: 17px;
+  background: linear-gradient(120deg, #087d42, #20a65e);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sene-chat-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sene-chat-sparkle {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: rgba(255,255,255,.2);
+  font-size: 25px;
+}
+
+.sene-chat-heading strong,
+.sene-chat-heading small {
+  display: block;
+}
+
+.sene-chat-heading strong {
+  font-size: 15px;
+}
+
+.sene-chat-heading small {
+  margin-top: 4px;
+  font-size: 11px;
+  opacity: .85;
+}
+
+.sene-chat-close {
+  border: 0;
+  background: rgba(255,255,255,.18);
+  color: white;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.sene-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #f7faf8;
+}
+
+.sene-chat-welcome {
+  margin: auto;
+  max-width: 260px;
+  text-align: center;
+  color: #315440;
+}
+
+.sene-chat-welcome > span {
+  font-size: 36px;
+  color: #168c4b;
+}
+
+.sene-chat-welcome strong {
+  display: block;
+  margin-top: 10px;
+}
+
+.sene-chat-welcome p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #718078;
+}
+
+.sene-chat-message {
+  max-width: 85%;
+  padding: 12px 14px;
+  border-radius: 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.sene-chat-message.user {
+  align-self: flex-end;
+  color: white;
+  background: #168447;
+  border-bottom-right-radius: 5px;
+}
+
+.sene-chat-form {
+  display: flex;
+  gap: 9px;
+  padding: 13px;
+  border-top: 1px solid #e8eee9;
+  background: white;
+}
+
+.sene-chat-form input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #dce8df;
+  background: #f8fbf9;
+  border-radius: 14px;
+  padding: 13px;
+  outline: none;
+  font-size: 13px;
+}
+
+.sene-chat-form input:focus {
+  border-color: #168c4b;
+}
+
+.sene-chat-form button {
+  width: 46px;
+  min-width: 46px;
+  border: 0;
+  border-radius: 14px;
+  background: #168447;
+  color: white;
+  cursor: pointer;
+}
+
+.sene-chat-note {
+  margin: 0;
+  padding: 0 12px 11px;
+  text-align: center;
+  color: #849188;
+  font-size: 10px;
+  background: white;
+}
+
