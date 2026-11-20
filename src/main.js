@@ -24,8 +24,8 @@ const sensors = [
   { name: 'Soil Moisture', value: '68.5', unit: '%', icon: 'droplets', color: 'blue' },
   { name: 'Temperature', value: '27.4', unit: '°C', icon: 'thermometer', color: 'orange' },
   { name: 'Humidity', value: '72', unit: '%', icon: 'waves', color: 'purple' },
-  { name: 'Water Level', value: '85', unit: '%', icon: 'droplets', color: 'cyan' },
-  { name: 'Soil pH', value: '6.5', unit: 'pH', icon: 'flask', color: 'green' }
+  { name: 'Soil pH', value: '6.5', unit: 'pH', icon: 'flask', color: 'green' },
+  { name: 'Water Tank Level', value: '85', unit: '%', icon: 'droplets', color: 'cyan' }
 ]
 
 const icons = {
@@ -358,7 +358,6 @@ function render() {
               <h2>Sensor Readings</h2>
               <p>Current field conditions</p>
             </div>
-            <span class="sample-label">SAMPLE DATA</span>
           </div>
 
           <section class="sensor-grid">
@@ -370,19 +369,33 @@ function render() {
                 <article class="sensor-card card">
                   <p class="sensor-card-title">${sensor.name}</p>
 
-                  <div class="sensor-gauge ${condition.status}">
-                    <svg viewBox="0 0 100 100" aria-hidden="true">
-                      <circle class="gauge-track" cx="50" cy="50" r="42"
-                        pathLength="100" />
-                      <circle class="gauge-progress" cx="50" cy="50" r="42"
-                        pathLength="100"
-                        stroke-dasharray="${gauge} 100" />
-                    </svg>
-                    <div class="gauge-reading">
-                      <strong>${sensor.value}</strong>
-                      <span>${sensor.unit}</span>
+                  ${sensor.name === 'Water Tank Level' ? `
+                    <div class="tank-visual">
+                      <div class="tank-shell">
+                        <div class="tank-water" style="height: ${gauge}%">
+                          <div class="tank-wave"></div>
+                        </div>
+                        <div class="tank-percent">
+                          ${sensor.value}<small>%</small>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  ` : `
+                    <div class="sensor-gauge ${condition.status}">
+                      <svg viewBox="0 0 100 100" aria-hidden="true">
+                        <circle class="gauge-track" cx="50" cy="50" r="42"
+                          pathLength="100" />
+                        <circle class="gauge-progress" cx="50" cy="50" r="42"
+                          pathLength="100"
+                          style="--gauge-level: ${gauge};"
+                          stroke-dasharray="${gauge} 100" />
+                      </svg>
+                      <div class="gauge-reading">
+                        <strong>${sensor.value}</strong>
+                        <span>${sensor.unit}</span>
+                      </div>
+                    </div>
+                  `}
 
                   <div class="sensor-condition ${condition.status}">
                     ${condition.label}
@@ -395,9 +408,7 @@ function render() {
           <section class="pump-page">
             <div class="pump-control-card card">
               <div class="big-pump-icon ${pumpOn ? 'pump-active' : ''}">${icon('power', 38)}</div>
-              <span class="eyebrow">IRRIGATION SYSTEM</span>
               <h2>Water Pump</h2>
-              <p class="muted">Device SEN-001</p>
 
               <div class="pump-status ${pumpOn ? 'status-running' : ''}">
                 <span></span>${pumpOn ? 'PUMP RUNNING' : 'PUMP STOPPED'}
@@ -407,30 +418,11 @@ function render() {
                 ${icon('power', 19)}
                 ${pumpOn ? 'Turn Pump OFF' : 'Turn Pump ON'}
               </button>
-              <p class="demo-note">Demo control only — hardware is not connected.</p>
             </div>
 
-            <section class="card device-settings">
-              <div class="settings-icon">${icon('settings', 21)}</div>
-              <div>
-                <strong>Device connection</strong>
-                <p>${online ? 'SEN-001 is online' : 'SEN-001 is offline'}</p>
-              </div>
-              <button class="icon-button" data-action="online">
-                ${icon(online ? 'wifiOff' : 'wifi', 18)}
-              </button>
-            </section>
           </section>
         ` : state.tab === 'automation' ? renderAutomation() : renderFarmMap()}
 
-        ${state.tab !== 'automation' && state.tab !== 'map' ? `
-        <section class="developer-tools">
-          <button data-action="stale">
-            ${icon('alert', 15)}
-            ${state.stale ? 'Clear stale warning' : 'Test stale readings'}
-          </button>
-        </section>
-        ` : ''}
       </main>
 
 

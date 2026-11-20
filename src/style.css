@@ -1643,3 +1643,785 @@ h1 { font-size: 29px; margin: 7px 0 4px; letter-spacing: -1px; }
   background: white;
 }
 
+
+/* OVERVIEW — improved text visibility */
+.welcome h1 {
+  font-weight: 900;
+  color: #142d1d;
+}
+
+.welcome .eyebrow {
+  font-weight: 800;
+  color: #21844c;
+}
+
+.section-title h2 {
+  font-weight: 900;
+  color: #183b25;
+}
+
+.section-title p {
+  font-weight: 700;
+  color: #53675a;
+}
+
+.sensor-card-title {
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  color: #263b2d !important;
+}
+
+.gauge-reading strong {
+  font-weight: 900;
+  color: #17291e;
+}
+
+.gauge-reading span {
+  font-weight: 800;
+  color: #43594a;
+}
+
+.sensor-condition {
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.sample-label {
+  font-weight: 800;
+}
+
+
+/* Animated cylindrical water tank */
+.tank-visual {
+  width: 100%;
+  min-height: 112px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3px 0;
+}
+
+.tank-shell {
+  position: relative;
+  width: 67px;
+  height: 105px;
+  overflow: hidden;
+  border: 4px solid #9bb8c5;
+  border-radius: 19px 19px 13px 13px;
+  background: linear-gradient(90deg, #e8f4f8, #f8fcfd 45%, #e2f0f5);
+  box-shadow: inset 3px 0 5px #b7d0da, 0 3px 8px #173b4a18;
+}
+
+.tank-shell::before {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  height: 10px;
+  border: 3px solid #789eae;
+  border-radius: 50%;
+  background: #d9edf4;
+}
+
+.tank-water {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  min-height: 0;
+  background: linear-gradient(90deg, #168bc4, #42c4e8 55%, #168bc4);
+  border-radius: 45% 45% 0 0 / 8px 8px 0 0;
+  transition: height 1.2s ease-in-out;
+  overflow: hidden;
+}
+
+.tank-wave {
+  position: absolute;
+  top: -7px;
+  left: -50%;
+  width: 200%;
+  height: 14px;
+  border-radius: 45%;
+  background: #76dcf3;
+  opacity: .8;
+  animation: tank-wave-motion 3s linear infinite;
+}
+
+.tank-percent {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #123c52;
+  font-size: 19px;
+  font-weight: 900;
+  text-shadow: 0 1px 3px white;
+}
+
+.tank-percent small {
+  font-size: 10px;
+  margin-left: 1px;
+}
+
+@keyframes tank-wave-motion {
+  from { transform: translateX(0) rotate(0deg); }
+  to { transform: translateX(25%) rotate(360deg); }
+}
+
+/* ===== COMPACT SENSOR OVERVIEW REDESIGN ===== */
+
+.sensor-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  align-items: stretch !important;
+}
+
+.sensor-card {
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 12px 8px !important;
+  border-radius: 17px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 7px !important;
+  overflow: hidden !important;
+}
+
+.sensor-card-title {
+  width: 100% !important;
+  text-align: center !important;
+  font-size: 12px !important;
+  font-weight: 850 !important;
+  line-height: 1.25 !important;
+  margin: 0 !important;
+  min-height: 30px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.sensor-gauge {
+  width: 82px !important;
+  height: 82px !important;
+  flex-shrink: 0 !important;
+}
+
+.sensor-gauge svg {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.gauge-reading {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0 !important;
+}
+
+.gauge-reading strong {
+  font-size: 22px !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.7px !important;
+}
+
+.gauge-reading span {
+  font-size: 11px !important;
+  line-height: 1.2 !important;
+}
+
+.sensor-condition {
+  width: 100% !important;
+  min-height: 29px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 5px 3px !important;
+  border-radius: 8px !important;
+  font-size: 9px !important;
+  font-weight: 850 !important;
+  line-height: 1.2 !important;
+  text-align: center !important;
+  overflow-wrap: anywhere !important;
+}
+
+.tank-visual {
+  min-height: 88px !important;
+  height: 88px !important;
+  padding: 0 !important;
+}
+
+.tank-shell {
+  width: 55px !important;
+  height: 82px !important;
+  border-radius: 15px 15px 10px 10px !important;
+}
+
+.tank-percent {
+  font-size: 16px !important;
+}
+
+.section-title {
+  margin-bottom: 12px !important;
+}
+
+.sample-label {
+  font-size: 9px !important;
+  letter-spacing: .5px !important;
+  padding: 5px 8px !important;
+  border-radius: 8px !important;
+}
+
+/* Narrow phones */
+@media (max-width: 360px) {
+  .sensor-grid {
+    gap: 8px !important;
+  }
+
+  .sensor-card {
+    padding: 10px 6px !important;
+  }
+
+  .sensor-gauge {
+    width: 72px !important;
+    height: 72px !important;
+  }
+
+  .sensor-card-title {
+    font-size: 11px !important;
+  }
+
+  .sensor-condition {
+    font-size: 8px !important;
+  }
+}
+
+
+/* Center the last Water Tank card in the sensor grid */
+.sensor-card:has(.tank-visual) {
+  grid-column: 1 / -1 !important;
+  width: 50% !important;
+  justify-self: center !important;
+}
+
+/* ===== SeneSmart Realistic Water Tank Animation ===== */
+
+.tank-visual {
+  min-height: 125px !important;
+  height: 125px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.tank-shell {
+  position: relative !important;
+  width: 68px !important;
+  height: 112px !important;
+  overflow: hidden !important;
+  border: 3px solid #8daab9 !important;
+  border-radius: 20px 20px 15px 15px !important;
+  background: linear-gradient(90deg, #d9e9ef, #f5fbfd 40%, #d5e6ed) !important;
+  box-shadow:
+    inset 5px 0 8px rgba(65, 108, 130, .12),
+    inset -4px 0 7px rgba(65, 108, 130, .10),
+    0 4px 10px rgba(30, 70, 90, .12) !important;
+}
+
+.tank-shell::before {
+  content: "" !important;
+  position: absolute !important;
+  z-index: 5 !important;
+  top: -4px !important;
+  left: -3px !important;
+  right: -3px !important;
+  height: 12px !important;
+  border: 3px solid #7999aa !important;
+  border-radius: 50% !important;
+  background: linear-gradient(90deg, #c7e0ea, #eff9fc, #c7e0ea) !important;
+}
+
+.tank-shell::after {
+  content: "" !important;
+  position: absolute !important;
+  z-index: 5 !important;
+  bottom: -4px !important;
+  left: -3px !important;
+  right: -3px !important;
+  height: 10px !important;
+  border: 2px solid #7999aa !important;
+  border-radius: 50% !important;
+  pointer-events: none !important;
+}
+
+.tank-water {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  background: linear-gradient(
+    90deg,
+    #0782bb 0%,
+    #20b4df 35%,
+    #49c8e8 55%,
+    #168fca 100%
+  ) !important;
+  transform-origin: bottom !important;
+  animation: tank-initial-fill 1.8s cubic-bezier(.22,.61,.36,1) both !important;
+  transition: height 1.5s ease-in-out !important;
+}
+
+.tank-wave {
+  position: absolute !important;
+  top: -8px !important;
+  left: -50% !important;
+  width: 200% !important;
+  height: 17px !important;
+  border-radius: 42% !important;
+  background: rgba(123, 230, 250, .85) !important;
+  animation: tank-wave-one 3.5s ease-in-out infinite alternate !important;
+}
+
+.tank-water::before {
+  content: "" !important;
+  position: absolute !important;
+  top: -5px !important;
+  left: -50% !important;
+  width: 200% !important;
+  height: 15px !important;
+  border-radius: 45% !important;
+  background: rgba(225, 250, 255, .35) !important;
+  animation: tank-wave-two 4.5s ease-in-out infinite alternate !important;
+}
+
+.tank-percent {
+  position: absolute !important;
+  z-index: 6 !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #ffffff !important;
+  font-size: 17px !important;
+  font-weight: 900 !important;
+  text-shadow: 0 2px 5px rgba(0, 40, 70, .65) !important;
+}
+
+.tank-percent small {
+  font-size: 10px !important;
+  margin-left: 2px !important;
+}
+
+@keyframes tank-initial-fill {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+@keyframes tank-wave-one {
+  from { transform: translateX(-8%) rotate(-3deg); }
+  to { transform: translateX(12%) rotate(3deg); }
+}
+
+@keyframes tank-wave-two {
+  from { transform: translateX(8%) rotate(3deg); }
+  to { transform: translateX(-12%) rotate(-3deg); }
+}
+
+
+/* ===== Smooth sensor gauge animations ===== */
+
+.sensor-gauge .gauge-progress {
+  stroke-dasharray: 0 100;
+  animation: sensor-gauge-fill 1.6s cubic-bezier(.22,.61,.36,1) forwards;
+  transition: stroke-dasharray 1.2s cubic-bezier(.22,.61,.36,1);
+  filter: drop-shadow(0 0 2px currentColor);
+}
+
+@keyframes sensor-gauge-fill {
+  from {
+    stroke-dasharray: 0 100;
+  }
+  to {
+    stroke-dasharray: var(--gauge-level, 0) 100;
+  }
+}
+
+/* Keep the original gauge appearance */
+.sensor-gauge.good .gauge-progress {
+  color: #238b50;
+}
+
+.sensor-gauge.warning .gauge-progress,
+.sensor-gauge.danger .gauge-progress {
+  color: #d93636;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sensor-gauge .gauge-progress {
+    animation: none;
+    transition: none;
+  }
+}
+
+
+/* ===== Professional Pump Power Button ===== */
+
+.pump-control-card .control-button {
+  width: 100% !important;
+  max-width: 340px !important;
+  min-height: 68px !important;
+  margin: 22px auto 0 !important;
+  padding: 17px 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 13px !important;
+  border: none !important;
+  border-radius: 18px !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  letter-spacing: .3px !important;
+  cursor: pointer !important;
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pump-control-card .control-button svg {
+  width: 25px !important;
+  height: 25px !important;
+  stroke-width: 2.8 !important;
+  flex-shrink: 0 !important;
+}
+
+.pump-control-card .control-button.button-start {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #249653, #14743d) !important;
+  box-shadow: 0 7px 18px rgba(25, 132, 69, .25),
+              inset 0 1px 0 rgba(255,255,255,.2) !important;
+}
+
+.pump-control-card .control-button.button-stop {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #e45a50, #bd302c) !important;
+  box-shadow: 0 7px 18px rgba(190, 48, 44, .22),
+              inset 0 1px 0 rgba(255,255,255,.2) !important;
+}
+
+.pump-control-card .control-button:active {
+  transform: scale(.96) !important;
+  box-shadow: 0 2px 7px rgba(0,0,0,.15) !important;
+}
+
+.pump-control-card .control-button:focus-visible {
+  outline: 3px solid #9acbab !important;
+  outline-offset: 4px !important;
+}
+
+.pump-control-card .demo-note {
+  margin-top: 15px !important;
+  font-size: 10px !important;
+  line-height: 1.5 !important;
+}
+
+@media (max-width: 360px) {
+  .pump-control-card .control-button {
+    min-height: 62px !important;
+    font-size: 14px !important;
+    border-radius: 15px !important;
+  }
+}
+
+
+/* ===== Interactive Pump Power Icon ===== */
+
+.pump-control-card .big-pump-icon {
+  width: 100px !important;
+  height: 100px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 auto 20px !important;
+  border-radius: 30px !important;
+  transition: background .4s ease, color .4s ease,
+             box-shadow .4s ease, transform .4s ease !important;
+  animation: pump-idle 2.5s ease-in-out infinite;
+}
+
+.pump-control-card .big-pump-icon svg {
+  width: 46px !important;
+  height: 46px !important;
+  stroke-width: 2.5 !important;
+  transition: transform .4s ease, filter .4s ease !important;
+}
+
+.pump-control-card .big-pump-icon.pump-active {
+  background: linear-gradient(145deg, #e2f8e9, #b9edca) !important;
+  color: #168342 !important;
+  box-shadow: 0 0 0 8px rgba(33, 132, 76, .08),
+              0 0 28px rgba(33, 132, 76, .25) !important;
+  animation: pump-running 1.8s ease-in-out infinite;
+}
+
+.pump-control-card .big-pump-icon.pump-active svg {
+  filter: drop-shadow(0 0 5px rgba(33, 132, 76, .4));
+  transform: scale(1.08);
+}
+
+@keyframes pump-idle {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.035); }
+}
+
+@keyframes pump-running {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 8px rgba(33, 132, 76, .08),
+                0 0 18px rgba(33, 132, 76, .15);
+  }
+  50% {
+    transform: scale(1.06);
+    box-shadow: 0 0 0 12px rgba(33, 132, 76, .06),
+                0 0 32px rgba(33, 132, 76, .3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pump-control-card .big-pump-icon,
+  .pump-control-card .big-pump-icon svg {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+
+/* ===== Tablet: Larger, Readable Typography ===== */
+
+body {
+  font-size: 16px !important;
+}
+
+h1 {
+  font-size: 28px !important;
+  line-height: 1.2 !important;
+}
+
+h2 {
+  font-size: 23px !important;
+  line-height: 1.25 !important;
+}
+
+h3 {
+  font-size: 19px !important;
+  line-height: 1.3 !important;
+}
+
+p {
+  font-size: 15px !important;
+  line-height: 1.5 !important;
+}
+
+button,
+input,
+select,
+textarea {
+  font-size: 15px !important;
+}
+
+label,
+strong,
+.sensor-card-title,
+.section-title,
+.device-settings strong {
+  font-size: 15px !important;
+}
+
+.eyebrow,
+.muted,
+.demo-note,
+.sensor-condition,
+.sample-label {
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
+
+.gauge-reading strong {
+  font-size: 25px !important;
+}
+
+.gauge-reading span {
+  font-size: 14px !important;
+}
+
+.tank-percent {
+  font-size: 19px !important;
+}
+
+.control-button {
+  font-size: 17px !important;
+}
+
+
+/* ===== SENESMART PREMIUM DESIGN SYSTEM ===== */
+
+:root {
+  --sene-green: #176b3b;
+  --sene-dark: #104d2d;
+  --sene-ink: #183326;
+  --sene-muted: #718278;
+  --sene-border: #e4ece6;
+  --sene-page: #f4f8f5;
+  --sene-shadow: 0 8px 24px rgba(24,61,39,.065);
+}
+
+body {
+  background: var(--sene-page) !important;
+  color: var(--sene-ink) !important;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+.topbar {
+  background: rgba(255,255,255,.97) !important;
+  border-bottom: 1px solid var(--sene-border) !important;
+  box-shadow: 0 3px 16px rgba(24,61,39,.04) !important;
+  backdrop-filter: blur(14px);
+}
+
+.content {
+  width: min(92%,1080px) !important;
+  margin: 30px auto 112px !important;
+}
+
+.welcome h1,
+.section-title h2,
+.pump-control-card h2 {
+  color: var(--sene-ink) !important;
+  letter-spacing: -.65px !important;
+  font-weight: 900 !important;
+}
+
+.welcome p,
+.section-title p,
+.muted {
+  color: var(--sene-muted) !important;
+}
+
+.card,
+.device-card,
+.quick-status,
+.automation-card,
+.automation-summary,
+.automation-manual,
+.pump-control-card,
+.device-settings {
+  background: #fff !important;
+  border: 1px solid var(--sene-border) !important;
+  border-radius: 20px !important;
+  box-shadow: var(--sene-shadow) !important;
+}
+
+.sensor-card {
+  border-radius: 20px !important;
+  border: 1px solid var(--sene-border) !important;
+  box-shadow: 0 7px 22px rgba(24,61,39,.055) !important;
+  transition: transform .2s ease, box-shadow .2s ease !important;
+}
+
+.sensor-card-title {
+  color: var(--sene-ink) !important;
+  font-weight: 850 !important;
+}
+
+.sensor-condition {
+  border-radius: 10px !important;
+  letter-spacing: .15px;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .18s ease, box-shadow .18s ease !important;
+}
+
+button:active {
+  transform: scale(.97);
+}
+
+.icon-button {
+  background: #f5f8f5 !important;
+  color: var(--sene-green) !important;
+  border: 1px solid var(--sene-border) !important;
+  border-radius: 13px !important;
+}
+
+.control-button,
+.sene-chat-form button {
+  border-radius: 15px !important;
+  font-weight: 850 !important;
+}
+
+.bottom-nav {
+  height: 78px !important;
+  gap: 0 !important;
+  background: rgba(255,255,255,.97) !important;
+  border-top: 1px solid var(--sene-border) !important;
+  box-shadow: 0 -7px 24px rgba(24,61,39,.055) !important;
+  backdrop-filter: blur(16px);
+}
+
+.bottom-nav button {
+  min-height: 58px !important;
+  color: #829087 !important;
+  font-size: 12px !important;
+  font-weight: 750 !important;
+}
+
+.bottom-nav button.nav-active {
+  color: var(--sene-green) !important;
+}
+
+.warning {
+  border: 1px solid #f1d9a9 !important;
+  border-radius: 14px !important;
+  background: #fff8e9 !important;
+  color: #805b19 !important;
+  padding: 13px 15px !important;
+}
+
+.sene-chat-window {
+  border: 1px solid var(--sene-border) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 18px 55px rgba(17,48,29,.18) !important;
+  overflow: hidden;
+}
+
+input,
+textarea,
+select {
+  border-radius: 12px !important;
+  border-color: var(--sene-border) !important;
+}
+
+@media (min-width: 601px) {
+  .content {
+    width: min(90%,1080px) !important;
+    margin-top: 38px !important;
+  }
+
+  .sensor-grid {
+    gap: 18px !important;
+  }
+
+  .sensor-card {
+    padding: 20px 16px !important;
+  }
+}
+
