@@ -1,5 +1,35 @@
 let aiChatOpen = false;
 let aiMessages = [];
+let drawingPointerId = null;
+let sensorDragState = null;
+let activeMapDrawing = null;
+
+const savedFarmBoundary = (() => {
+  try {
+    const saved = JSON.parse(localStorage.getItem('senesmart-farm-boundary') || 'null');
+    return Array.isArray(saved) ? saved : null;
+  } catch {
+    return null;
+  }
+})();
+
+const savedMapDrawings = (() => {
+  try {
+    const saved = JSON.parse(localStorage.getItem('senesmart-map-drawings') || '[]');
+    return Array.isArray(saved) ? saved : [];
+  } catch {
+    return [];
+  }
+})();
+
+const savedSensorPositions = (() => {
+  try {
+    const saved = JSON.parse(localStorage.getItem('senesmart-sensor-positions') || '{}');
+    return saved && typeof saved === 'object' && !Array.isArray(saved) ? saved : {};
+  } catch {
+    return {};
+  }
+})();
 
 function escapeChatText(value) {
   return String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -17,7 +47,17 @@ const state = {
   stopTime: '06:30',
   moistureStart: 35,
   moistureStop: 65,
-  selectedSensor: 'S1'
+  selectedSensor: 'S1',
+  mapSettingsOpen: false,
+  drawMode: false,
+  mapDrawings: savedMapDrawings,
+  drawingTool: 'pen',
+  drawingColor: '#176b3b',
+  drawingZoneName: 'Farm boundary',
+  mapBoundary: savedFarmBoundary,
+  previousMapBoundary: null,
+  sensorPositions: savedSensorPositions,
+  placingSensor: null
 }
 
 const sensors = [
@@ -210,6 +250,79 @@ function renderAutomation() {
 
 
 
+function renderMapSettings() {
+  const boundarySaved = Array.isArray(state.mapBoundary) && state.mapBoundary.length >= 3
+
+  const sensorNames = [
+    ['S1', 'Soil Wetness', 'Soil moisture'],
+    ['S2', 'Weather Heat', 'Temperature'],
+    ['S3', 'Air Moisture', 'Humidity'],
+    ['S4', 'Water Supply', 'Water tank level'],
+    ['S5', 'Soil Acidity', 'Soil pH']
+  ]
+
+  return `
+    <section class="farm-settings-page">
+      <button class="farm-settings-back" data-action="map">
+        ${icon('arrow-left', 18)}
+        Back to Map
+      </button>
+
+      <section class="farm-settings-card card">
+        <div class="farm-settings-heading">
+          <div class="farm-settings-icon">${icon('map', 23)}</div>
+          <div>
+            <h2>Farm Boundary</h2>
+            <p>Define the shape and size of your farm</p>
+          </div>
+        </div>
+
+        <div class="farm-boundary-status">
+          <span class="farm-settings-status-dot ${boundarySaved ? 'saved' : ''}"></span>
+          <span>${boundarySaved ? 'Farm boundary saved' : 'Farm boundary not set'}</span>
+        </div>
+
+        <button class="farm-settings-primary" data-action="start-map-drawing">
+          ${icon('edit-3', 18)}
+          ${boundarySaved ? 'Update Farm Boundary' : 'Draw Farm Boundary'}
+        </button>
+      </section>
+
+      <section class="farm-settings-card card">
+        <div class="farm-settings-heading">
+          <div class="farm-settings-icon">${icon('map-pin', 23)}</div>
+          <div>
+            <h2>Sensor Locations</h2>
+            <p>Manage the sensors installed on your farm</p>
+          </div>
+        </div>
+
+        <div class="farm-settings-sensor-list">
+          ${sensorNames.map(sensor => `
+            <div class="farm-settings-sensor">
+              <div class="farm-settings-sensor-icon">${icon('radio-tower', 19)}</div>
+              <div>
+                <strong>${sensor[1]}</strong>
+                <small>${sensor[0]} · ${sensor[2]}</small>
+                <span class="farm-settings-location">${state.sensorPositions[sensor[0]] ? 'Location saved' : 'Not placed'}</span>
+              </div>
+              <button class="farm-settings-place-button"
+                data-action="place-sensor-${sensor[0].toLowerCase()}"
+                ${boundarySaved ? '' : 'disabled'}>
+                ${state.sensorPositions[sensor[0]] ? 'Move' : 'Place'}
+              </button>
+            </div>
+          `).join('')}
+        </div>
+
+        <p class="farm-settings-hint">
+          ${boundarySaved ? 'Choose Place or Move, then tap the sensor location inside your farm boundary.' : 'Draw and save your farm boundary before placing sensors.'}
+        </p>
+      </section>
+    </section>
+  `
+}
+
 function renderFarmMap() {
   const farmSensors = [
     { id: 'S1', index: 0, x: 23, y: 35, farmerName: 'Soil Wetness', label: 'SOIL IS WET', icon: 'droplets' },
@@ -235,9 +348,15 @@ function renderFarmMap() {
       label = value >= 60 ? 'WATER IS PLENTY' : value >= 30 ? 'WATER IS LOW' : 'WATER IS VERY LOW'
     }
 
+    const savedPosition = state.sensorPositions[item.id]
+    const hasSavedPosition = savedPosition &&
+      Number.isFinite(savedPosition.x) &&
+      Number.isFinite(savedPosition.y)
+
     return {
       ...item,
       ...sensor,
+      ...(hasSavedPosition ? { x: savedPosition.x, y: savedPosition.y } : {}),
       farmerLabel: label,
       status: state.online ? 'online' : 'offline'
     }
@@ -252,16 +371,118 @@ function renderFarmMap() {
           <h2>Farm Map</h2>
           <p>See what is happening around your farm</p>
         </div>
-        <span class="sample-label">DEMO</span>
+        <button class="map-settings-button" data-action="map-settings"
+          aria-label="Open farm map settings" aria-expanded="${state.mapSettingsOpen}">
+          ${icon('settings', 21)}
+        </button>
       </div>
 
+      ${state.mapSettingsOpen ? `
+        <section class="map-settings-panel card">
+          <div class="map-settings-panel-heading">
+            <div class="map-settings-icon">${icon('settings', 19)}</div>
+            <div>
+              <strong>Farm Setup</strong>
+              <p>Configure your farm map</p>
+            </div>
+          </div>
+          <button class="map-settings-option map-settings-action"
+            data-action="start-map-drawing">
+            ${icon('map', 18)}
+            <span>Draw Farm Boundary</span>
+            ${icon('chevron', 17)}
+          </button>
+          <div class="map-settings-option">
+            ${icon('map-pin', 18)}
+            <span>Sensor placement</span>
+          </div>
+          <p class="map-settings-note">Farm drawing and sensor placement tools will be added here.</p>
+        </section>
+      ` : ''}
+
+      ${state.placingSensor ? `
+        <section class="sensor-placement-banner">
+          <div>
+            <strong>Place sensor ${state.placingSensor}</strong>
+            <p>Tap the exact location on your farm map.</p>
+          </div>
+          <button data-action="cancel-sensor-placement">Cancel</button>
+        </section>
+      ` : ''}
+
+      ${state.drawMode ? `
+        <section class="map-draw-toolbar card">
+          <strong>Draw your farm boundary</strong>
+          <p>Tap around the edges of your farm to mark its corners.</p>
+          <span class="map-point-count">${state.mapBoundary.length} points marked</span>
+          <div class="map-draw-actions">
+            <button data-action="undo-map-point" ${state.mapBoundary.length ? '' : 'disabled'}>
+              Undo
+            </button>
+            <button class="map-finish-button" data-action="finish-map-drawing"
+              ${state.mapBoundary.length < 3 ? 'disabled' : ''}>
+              Finish & Save
+            </button>
+            <button data-action="cancel-map-drawing">Cancel</button>
+          </div>
+        </section>
+      ` : ''}
+
       <section class="simple-map-card card">
-        <div class="simple-map-area">
-          <svg class="farm-boundary" viewBox="0 0 360 300" role="img" aria-label="Irregular farm boundary">
-            <path class="farm-boundary-fill"
-              d="M53 49 L102 29 L151 39 L190 24 L244 43 L298 35 L320 78 L307 119 L326 158 L301 202 L309 246 L267 269 L218 257 L175 278 L130 260 L91 270 L58 239 L37 196 L48 154 L27 112 Z" />
-            <path class="farm-boundary-line"
-              d="M53 49 L102 29 L151 39 L190 24 L244 43 L298 35 L320 78 L307 119 L326 158 L301 202 L309 246 L267 269 L218 257 L175 278 L130 260 L91 270 L58 239 L37 196 L48 154 L27 112 Z" />
+        <div class="simple-map-area map-drawing-area farm-map-canvas">
+          <svg class="farm-boundary paint-canvas" viewBox="0 0 1000 700"
+            preserveAspectRatio="none" role="img" aria-label="Farm boundary">
+            ${state.mapBoundary === null ? `
+              <g transform="scale(2.7777778 2.3333333)">
+                <path class="farm-boundary-fill"
+                  d="M53 49 L102 29 L151 39 L190 24 L244 43 L298 35 L320 78 L307 119 L326 158 L301 202 L309 246 L267 269 L218 257 L175 278 L130 260 L91 270 L58 239 L37 196 L48 154 L27 112 Z" />
+                <path class="farm-boundary-line"
+                  d="M53 49 L102 29 L151 39 L190 24 L244 43 L298 35 L320 78 L307 119 L326 158 L301 202 L309 246 L267 269 L218 257 L175 278 L130 260 L91 270 L58 239 L37 196 L48 154 L27 112 Z" />
+              </g>
+            ` : `
+              ${state.mapBoundary.length >= 3 ? `
+                <polygon class="farm-boundary-fill"
+                  points="${state.mapBoundary.map(p => `${p.x * 10},${p.y * 7}`).join(' ')}" />
+              ` : ''}
+              ${state.mapBoundary.length >= 2 ? `
+                <polyline class="farm-boundary-line"
+                  points="${state.mapBoundary.map(p => `${p.x * 10},${p.y * 7}`).join(' ')}" />
+              ` : ''}
+            `}
+            <g id="saved-drawings-layer">
+              ${state.mapDrawings.map((drawing, index) => {
+                const color = drawing.color || '#176b3b'
+                const name = escapeChatText(drawing.zoneName || `Drawing ${index + 1}`)
+
+                if (drawing.type === 'pen') {
+                  const points = (drawing.points || [])
+                    .map(point => `${point.x * 10},${point.y * 7}`)
+                    .join(' ')
+                  return `<polyline points="${points}" fill="none" stroke="${color}"
+                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                    vector-effect="non-scaling-stroke"><title>${name}</title></polyline>`
+                }
+
+                if (drawing.type === 'rect') {
+                  return `<rect x="${drawing.x * 10}" y="${drawing.y * 7}"
+                    width="${drawing.w * 10}" height="${drawing.h * 7}"
+                    fill="${color}" fill-opacity=".16" stroke="${color}"
+                    stroke-width="3" vector-effect="non-scaling-stroke">
+                    <title>${name}</title></rect>`
+                }
+
+                if (drawing.type === 'circle') {
+                  return `<ellipse cx="${(drawing.x + drawing.w / 2) * 10}"
+                    cy="${(drawing.y + drawing.h / 2) * 7}"
+                    rx="${Math.abs(drawing.w) * 5}" ry="${Math.abs(drawing.h) * 3.5}"
+                    fill="${color}" fill-opacity=".16" stroke="${color}"
+                    stroke-width="3" vector-effect="non-scaling-stroke">
+                    <title>${name}</title></ellipse>`
+                }
+
+                return ''
+              }).join('')}
+            </g>
           </svg>
 
           ${farmSensors.map(sensor => `
@@ -314,6 +535,94 @@ function renderFarmMap() {
   `
 }
 
+function renderMapDrawing() {
+  const drawings = state.mapDrawings.map((drawing, index) => {
+    const color = drawing.color || '#176b3b';
+    const name = escapeChatText(drawing.zoneName || `Drawing ${index + 1}`);
+
+    if (drawing.type === 'pen') {
+      const points = (drawing.points || [])
+        .map(point => `${point.x * 10},${point.y * 7}`)
+        .join(' ');
+      return `<polyline points="${points}" fill="none" stroke="${color}"
+        stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+        vector-effect="non-scaling-stroke"><title>${name}</title></polyline>`;
+    }
+
+    if (drawing.type === 'rect') {
+      return `<rect x="${drawing.x * 10}" y="${drawing.y * 7}"
+        width="${drawing.w * 10}" height="${drawing.h * 7}"
+        fill="${color}" fill-opacity=".16" stroke="${color}"
+        stroke-width="3" vector-effect="non-scaling-stroke">
+        <title>${name}</title></rect>`;
+    }
+
+    if (drawing.type === 'circle') {
+      return `<ellipse cx="${(drawing.x + drawing.w / 2) * 10}"
+        cy="${(drawing.y + drawing.h / 2) * 7}"
+        rx="${Math.abs(drawing.w) * 5}" ry="${Math.abs(drawing.h) * 3.5}"
+        fill="${color}" fill-opacity=".16" stroke="${color}"
+        stroke-width="3" vector-effect="non-scaling-stroke">
+        <title>${name}</title></ellipse>`;
+    }
+
+    return '';
+  }).join('');
+
+  return `
+    <section class="map-drawing-workspace">
+      <header class="map-drawing-header">
+        <h2>Farm Map Editor</h2>
+        <p>Draw your farm boundary and create separate farming zones. Your drawings stay on the canvas.</p>
+        <strong>${state.mapDrawings.length} drawing objects</strong>
+      </header>
+
+      <div class="paint-toolbar">
+        <button data-action="tool-pen" class="${state.drawingTool === 'pen' ? 'active' : ''}">✎ Pen</button>
+        <button data-action="tool-rect" class="${state.drawingTool === 'rect' ? 'active' : ''}">▭ Rectangle</button>
+        <button data-action="tool-circle" class="${state.drawingTool === 'circle' ? 'active' : ''}">◯ Circle</button>
+        <button data-action="tool-eraser" class="${state.drawingTool === 'eraser' ? 'active' : ''}">⌫ Eraser</button>
+        <button data-action="undo-map-point">↶ Undo</button>
+      </div>
+
+      <div class="paint-options">
+        <label>Zone name
+          <input id="drawing-zone-name" type="text"
+            value="${escapeChatText(state.drawingZoneName)}" maxlength="40">
+        </label>
+        <label>Color
+          <select id="drawing-color">
+            <option value="#176b3b" ${state.drawingColor === '#176b3b' ? 'selected' : ''}>Green</option>
+            <option value="#2474d2" ${state.drawingColor === '#2474d2' ? 'selected' : ''}>Blue</option>
+            <option value="#e69a22" ${state.drawingColor === '#e69a22' ? 'selected' : ''}>Orange</option>
+            <option value="#9b59b6" ${state.drawingColor === '#9b59b6' ? 'selected' : ''}>Purple</option>
+            <option value="#d94b4b" ${state.drawingColor === '#d94b4b' ? 'selected' : ''}>Red</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="simple-map-area map-drawing-area">
+        <svg class="farm-boundary paint-canvas" viewBox="0 0 1000 700"
+          preserveAspectRatio="none" aria-label="Farm drawing canvas">
+          ${state.mapBoundary && state.mapBoundary.length >= 3 ? `
+            <polygon points="${state.mapBoundary.map(point => `${point.x * 10},${point.y * 7}`).join(' ')}"
+              fill="#176b3b" fill-opacity=".08" stroke="#176b3b"
+              stroke-width="3" vector-effect="non-scaling-stroke"/>
+          ` : ''}
+          <g id="saved-drawings-layer">${drawings}</g>
+          <g id="active-drawing-layer"></g>
+        </svg>
+      </div>
+
+      <div class="map-drawing-actions">
+        <button data-action="cancel-map-drawing">Cancel</button>
+        <button data-action="clear-map-drawings">Clear All</button>
+        <button data-action="finish-map-drawing">Save Farm Map</button>
+      </div>
+    </section>
+  `;
+}
+
 function render() {
   const app = document.querySelector('#app')
   const online = state.online
@@ -321,7 +630,7 @@ function render() {
 
   app.innerHTML = `
     <div class="app">
-      <header class="topbar">
+      ${state.tab !== 'map-drawing' ? `<header class="topbar">
         <img src="/senesmart-logo.png" alt="SeneSmart">
         <div class="sene-assistant-actions">
           <button class="sene-speak-button" data-action="sene-speak" aria-label="Speak to Sene">
@@ -334,18 +643,18 @@ function render() {
             <span class="sene-ai-tag">AI</span>
           </button>
         </div>
-      </header>
+      </header>` : ''}
 
       <main class="content">
-        <section class="welcome">
+        ${state.tab !== 'map-drawing' ? `<section class="welcome">
           <div>
             <span class="eyebrow">SMART FARMING</span>
-            <h1>${state.tab === 'home' ? 'Farm Overview' : state.tab === 'pump' ? 'Pump Control' : state.tab === 'automation' ? 'Automation' : 'Farm Map'}</h1>
+            <h1>${state.tab === 'home' ? 'Farm Overview' : state.tab === 'pump' ? 'Pump Control' : state.tab === 'automation' ? 'Automation' : state.tab === 'map-settings' ? 'Farm Settings' : 'Farm Map'}</h1>
             <p>Your farm, at a glance.</p>
           </div>
-        </section>
+        </section>` : ''}
 
-        ${state.tab === 'home' ? `
+        ${state.tab === 'map-drawing' ? renderMapDrawing() : state.tab === 'home' ? `
 
           ${state.stale ? `
             <div class="warning">
@@ -421,7 +730,7 @@ function render() {
             </div>
 
           </section>
-        ` : state.tab === 'automation' ? renderAutomation() : renderFarmMap()}
+        ` : state.tab === 'automation' ? renderAutomation() : state.tab === 'map-settings' ? renderMapSettings() : renderFarmMap()}
 
       </main>
 
@@ -469,7 +778,7 @@ function render() {
         </section>
       ` : ''}
 
-      <nav class="bottom-nav">
+      ${state.tab !== 'map-drawing' ? `<nav class="bottom-nav">
         <button class="${state.tab === 'home' ? 'nav-active' : ''}" data-action="home">
           ${icon('dashboard', 21)}
           <span>Overview</span>
@@ -486,7 +795,7 @@ function render() {
           ${icon('map', 21)}
           <span>Map</span>
         </button>
-      </nav>
+      </nav>` : ''}
     </div>
   `
 }
@@ -510,6 +819,253 @@ document.addEventListener('input', event => {
   const output = document.getElementById(outputId)
   if (output) output.textContent = event.target.value
 })
+
+
+
+function getDrawingPoint(event, area) {
+  const rect = area.getBoundingClientRect();
+  return {
+    x: Math.max(0, Math.min(100, ((event.clientX - rect.left) / rect.width) * 100)),
+    y: Math.max(0, Math.min(100, ((event.clientY - rect.top) / rect.height) * 100))
+  };
+}
+
+function saveMapDrawings() {
+  try {
+    localStorage.setItem('senesmart-map-drawings', JSON.stringify(state.mapDrawings));
+    return true;
+  } catch (error) {
+    console.error('Could not save map drawings:', error);
+    return false;
+  }
+}
+
+function renderActiveDrawing() {
+  const layer = document.getElementById('active-drawing-layer');
+  if (!layer || !activeMapDrawing) return;
+
+  const d = activeMapDrawing;
+  const color = d.color;
+
+  if (d.type === 'pen') {
+    const points = d.points.map(p => `${p.x * 10},${p.y * 7}`).join(' ');
+    layer.innerHTML = `<polyline points="${points}" fill="none"
+      stroke="${color}" stroke-width="3" stroke-linecap="round"
+      stroke-linejoin="round" vector-effect="non-scaling-stroke"/>`;
+  } else {
+    const x = Math.min(d.start.x, d.current.x) * 10;
+    const y = Math.min(d.start.y, d.current.y) * 7;
+    const w = Math.abs(d.current.x - d.start.x) * 10;
+    const h = Math.abs(d.current.y - d.start.y) * 7;
+
+    layer.innerHTML = d.type === 'rect'
+      ? `<rect x="${x}" y="${y}" width="${w}" height="${h}"
+          fill="${color}" fill-opacity=".16" stroke="${color}"
+          stroke-width="3" vector-effect="non-scaling-stroke"/>`
+      : `<ellipse cx="${x + w / 2}" cy="${y + h / 2}"
+          rx="${w / 2}" ry="${h / 2}" fill="${color}"
+          fill-opacity=".16" stroke="${color}" stroke-width="3"
+          vector-effect="non-scaling-stroke"/>`;
+  }
+}
+
+function eraseDrawingAt(point) {
+  let nearestIndex = -1;
+  let nearestDistance = Infinity;
+
+  state.mapDrawings.forEach((drawing, index) => {
+    let distance = Infinity;
+
+    if (drawing.type === 'pen') {
+      for (const p of drawing.points || []) {
+        distance = Math.min(distance, Math.hypot(p.x - point.x, p.y - point.y));
+      }
+    } else {
+      const cx = drawing.x + drawing.w / 2;
+      const cy = drawing.y + drawing.h / 2;
+      distance = Math.hypot(cx - point.x, cy - point.y);
+    }
+
+    if (distance < nearestDistance) {
+      nearestDistance = distance;
+      nearestIndex = index;
+    }
+  });
+
+  if (nearestIndex !== -1 && nearestDistance < 5) {
+    state.mapDrawings.splice(nearestIndex, 1);
+    saveMapDrawings();
+    render();
+  }
+}
+
+document.addEventListener('pointerdown', event => {
+  const mapArea = event.target.closest('.simple-map-area')
+
+  if (mapArea && !state.drawMode) {
+    if (state.placingSensor) {
+      event.preventDefault()
+
+      const rect = mapArea.getBoundingClientRect()
+      const x = Math.min(97, Math.max(3, ((event.clientX - rect.left) / rect.width) * 100))
+      const y = Math.min(97, Math.max(3, ((event.clientY - rect.top) / rect.height) * 100))
+      const sensorId = state.placingSensor
+
+      state.sensorPositions[sensorId] = { x, y }
+      state.selectedSensor = sensorId
+      state.placingSensor = null
+
+      try {
+        localStorage.setItem('senesmart-sensor-positions', JSON.stringify(state.sensorPositions))
+      } catch (error) {
+        console.error('Could not save sensor position:', error)
+      }
+
+      render()
+      return
+    }
+
+    const marker = event.target.closest('.simple-sensor-marker')
+    if (marker) {
+      const sensorId = marker.dataset.action?.replace('sensor-', '').toUpperCase()
+      if (sensorId) {
+        event.preventDefault()
+        sensorDragState = {
+          pointerId: event.pointerId,
+          sensorId,
+          marker,
+          mapArea
+        }
+        marker.setPointerCapture(event.pointerId)
+        return
+      }
+    }
+  }
+
+  const area = event.target.closest('.map-drawing-area');
+  if (!area || !state.drawMode || drawingPointerId !== null) return;
+
+  event.preventDefault();
+  drawingPointerId = event.pointerId;
+  area.setPointerCapture(event.pointerId);
+
+  const point = getDrawingPoint(event, area);
+
+  if (state.drawingTool === 'eraser') {
+    eraseDrawingAt(point);
+    drawingPointerId = null;
+    return;
+  }
+
+  activeMapDrawing = {
+    type: state.drawingTool,
+    color: state.drawingColor,
+    zoneName: state.drawingZoneName,
+    points: state.drawingTool === 'pen' ? [point] : undefined,
+    start: point,
+    current: point
+  };
+
+  if (state.drawingTool === 'pen') {
+    state.mapDrawings.push(activeMapDrawing);
+  }
+
+  renderActiveDrawing();
+});
+
+document.addEventListener('pointermove', event => {
+  if (sensorDragState && event.pointerId === sensorDragState.pointerId) {
+    event.preventDefault()
+
+    const { mapArea, marker, sensorId } = sensorDragState
+    const rect = mapArea.getBoundingClientRect()
+    const x = Math.min(97, Math.max(3, ((event.clientX - rect.left) / rect.width) * 100))
+    const y = Math.min(97, Math.max(3, ((event.clientY - rect.top) / rect.height) * 100))
+
+    state.sensorPositions[sensorId] = { x, y }
+    marker.style.left = `${x}%`
+    marker.style.top = `${y}%`
+    return
+  }
+
+  if (event.pointerId !== drawingPointerId || !activeMapDrawing) return;
+
+  const area = document.querySelector('.map-drawing-area');
+  if (!area) return;
+
+  event.preventDefault();
+  const point = getDrawingPoint(event, area);
+  activeMapDrawing.current = point;
+
+  if (activeMapDrawing.type === 'pen') {
+    const previous = activeMapDrawing.points[activeMapDrawing.points.length - 1];
+    if (Math.hypot(point.x - previous.x, point.y - previous.y) >= 0.15) {
+      activeMapDrawing.points.push(point);
+    }
+  }
+
+  renderActiveDrawing();
+});
+
+function finishMapStroke(event) {
+  if (event.pointerId !== drawingPointerId) return;
+
+  if (activeMapDrawing) {
+    const drawing = activeMapDrawing;
+
+    if (drawing.type !== 'pen') {
+      const x = Math.min(drawing.start.x, drawing.current.x);
+      const y = Math.min(drawing.start.y, drawing.current.y);
+      const w = Math.abs(drawing.current.x - drawing.start.x);
+      const h = Math.abs(drawing.current.y - drawing.start.y);
+
+      if (w > 0.3 && h > 0.3) {
+        state.mapDrawings.push({
+          type: drawing.type,
+          x, y, w, h,
+          color: drawing.color,
+          zoneName: drawing.zoneName
+        });
+      }
+    }
+
+    activeMapDrawing = null;
+    drawingPointerId = null;
+    saveMapDrawings();
+    render();
+  } else {
+    drawingPointerId = null;
+  }
+}
+
+function finishSensorDrag(event) {
+  if (!sensorDragState || event.pointerId !== sensorDragState.pointerId) return
+
+  try {
+    localStorage.setItem('senesmart-sensor-positions', JSON.stringify(state.sensorPositions))
+  } catch (error) {
+    console.error('Could not save sensor position:', error)
+  }
+
+  sensorDragState = null
+}
+
+document.addEventListener('pointerup', finishSensorDrag);
+document.addEventListener('pointercancel', finishSensorDrag);
+document.addEventListener('pointerup', finishMapStroke);
+document.addEventListener('pointercancel', finishMapStroke);
+
+document.addEventListener('change', event => {
+  if (event.target.id === 'drawing-color') {
+    state.drawingColor = event.target.value;
+  }
+});
+
+document.addEventListener('input', event => {
+  if (event.target.id === 'drawing-zone-name') {
+    state.drawingZoneName = event.target.value;
+  }
+});
 
 document.addEventListener('click', event => {
   const button = event.target.closest('[data-action]')
@@ -535,6 +1091,79 @@ document.addEventListener('click', event => {
       break
     case 'map':
       state.tab = 'map'
+      state.mapSettingsOpen = false
+      break
+    case 'map-settings':
+      state.tab = 'map-settings'
+      break
+    case 'start-map-drawing':
+      state.previousMapBoundary = state.mapBoundary;
+      state.drawMode = true;
+      state.tab = 'map-drawing';
+      state.mapSettingsOpen = false;
+      break
+    case 'tool-pen':
+      state.drawingTool = 'pen';
+      break
+    case 'tool-rect':
+      state.drawingTool = 'rect';
+      break
+    case 'tool-circle':
+      state.drawingTool = 'circle';
+      break
+    case 'tool-eraser':
+      state.drawingTool = 'eraser';
+      break
+    case 'undo-map-point':
+      state.mapDrawings.pop();
+      saveMapDrawings();
+      break
+    case 'clear-map-drawings':
+      drawingPointerId = null;
+      activeMapDrawing = null;
+      state.mapDrawings = [];
+      state.mapBoundary = [];
+      try {
+        localStorage.removeItem('senesmart-map-drawings');
+        localStorage.removeItem('senesmart-farm-boundary');
+      } catch (error) {
+        console.error('Could not clear saved farm map:', error);
+      }
+      break
+    case 'finish-map-drawing':
+      if (saveMapDrawings()) {
+        const boundary = state.mapDrawings.find(
+          drawing => drawing.type === 'pen' && drawing.zoneName === 'Farm boundary'
+        );
+        if (boundary && boundary.points.length >= 3) {
+          state.mapBoundary = boundary.points;
+          localStorage.setItem('senesmart-farm-boundary', JSON.stringify(state.mapBoundary));
+        }
+        state.drawMode = false;
+        state.previousMapBoundary = null;
+        state.tab = 'map-settings';
+      }
+      break
+    case 'cancel-map-drawing':
+      drawingPointerId = null;
+      activeMapDrawing = null;
+      state.mapBoundary = state.previousMapBoundary;
+      state.previousMapBoundary = null;
+      state.drawMode = false;
+      state.tab = 'map-settings';
+      break
+    case 'place-sensor-s1':
+    case 'place-sensor-s2':
+    case 'place-sensor-s3':
+    case 'place-sensor-s4':
+    case 'place-sensor-s5':
+      state.placingSensor = button.dataset.action.slice(-2).toUpperCase()
+      state.selectedSensor = state.placingSensor
+      state.tab = 'map'
+      state.mapSettingsOpen = false
+      break
+    case 'cancel-sensor-placement':
+      state.placingSensor = null
       break
     case 'sensor-s1':
       state.selectedSensor = 'S1'

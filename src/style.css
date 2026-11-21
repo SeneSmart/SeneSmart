@@ -2425,3 +2425,1026 @@ select {
   }
 }
 
+
+/* ===== FARM MAP SETTINGS ===== */
+
+.simple-map-heading {
+  gap: 14px;
+}
+
+.map-settings-button {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #dce9df;
+  border-radius: 15px;
+  background: #fff;
+  color: #176b3b;
+  box-shadow: 0 5px 15px rgba(24,61,39,.07);
+  cursor: pointer;
+}
+
+.map-settings-button:active {
+  background: #eaf5ed;
+}
+
+.map-settings-panel {
+  padding: 17px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  animation: map-settings-appear .2s ease-out;
+}
+
+.map-settings-panel-heading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e8eee9;
+}
+
+.map-settings-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: #eaf5ed;
+  color: #176b3b;
+}
+
+.map-settings-panel-heading strong {
+  display: block;
+  color: #183326;
+  font-size: 16px;
+  font-weight: 850;
+}
+
+.map-settings-panel-heading p {
+  margin: 3px 0 0;
+  color: #718278;
+  font-size: 13px;
+}
+
+.map-settings-option {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: #245b39;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.map-settings-option svg {
+  color: #238b50;
+}
+
+.map-settings-note {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #f4f8f5;
+  color: #718278;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+@keyframes map-settings-appear {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ===== TOUCHSCREEN FARM BOUNDARY DRAWING ===== */
+
+.simple-map-area {
+  touch-action: manipulation;
+  cursor: crosshair;
+}
+
+.simple-map-area:has(.farm-drawing-point) {
+  cursor: crosshair;
+}
+
+.farm-drawing-point {
+  fill: #ffffff;
+  stroke: #176b3b;
+  stroke-width: 3;
+}
+
+.map-draw-toolbar {
+  padding: 17px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.map-draw-toolbar > strong {
+  font-size: 16px;
+  font-weight: 850;
+  color: #183326;
+}
+
+.map-draw-toolbar > p {
+  margin: 0;
+  color: #718278;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.map-point-count {
+  font-size: 13px;
+  font-weight: 800;
+  color: #176b3b;
+}
+
+.map-draw-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.map-draw-actions button {
+  min-height: 43px;
+  flex: 1;
+  padding: 9px 12px;
+  border: 1px solid #dce9df;
+  border-radius: 11px;
+  background: #f4f8f5;
+  color: #245b39;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.map-draw-actions .map-finish-button {
+  background: #176b3b;
+  border-color: #176b3b;
+  color: white;
+}
+
+.map-draw-actions button:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+.map-settings-action {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.map-settings-action span {
+  flex: 1;
+}
+
+
+/* Dedicated Farm Settings screen */
+.farm-settings-page {
+  display: grid;
+  gap: 16px;
+  padding-bottom: 18px;
+}
+.settings-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: start;
+  border: 0;
+  background: transparent;
+  color: var(--sene-green, #176b3b);
+  font: inherit;
+  font-weight: 800;
+  padding: 8px 4px;
+  cursor: pointer;
+}
+.settings-back-button svg {
+  transform: rotate(180deg);
+}
+.settings-card {
+  padding: 18px;
+  border: 1px solid var(--sene-border, #e4ece6);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: var(--sene-shadow, 0 8px 24px rgba(24,61,39,.065));
+}
+.settings-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.settings-icon {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: #176b3b;
+  background: #eaf5ed;
+}
+.sensor-settings-icon {
+  color: #2875a8;
+  background: #eaf4fb;
+}
+.settings-card-heading h2 {
+  margin: 0 0 4px;
+  color: var(--sene-ink, #183326);
+  font-size: 18px;
+  font-weight: 900;
+}
+.settings-card-heading p {
+  margin: 0;
+  color: var(--sene-muted, #718278);
+  font-size: 13px;
+  font-weight: 600;
+}
+.settings-status-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 20px 0 14px;
+  color: #53665a;
+  font-size: 13px;
+  font-weight: 750;
+}
+.settings-status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #d99b36;
+}
+.settings-status-dot.is-configured {
+  background: #279653;
+  box-shadow: 0 0 0 4px rgba(39,150,83,.12);
+}
+.settings-primary-button {
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #207b46, #125b32);
+  color: #fff;
+  font: inherit;
+  font-weight: 850;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(23,107,59,.18);
+}
+.settings-primary-button:active,
+.settings-back-button:active {
+  transform: scale(.98);
+}
+.sensor-settings-list {
+  display: grid;
+  gap: 0;
+  margin-top: 16px;
+}
+.sensor-settings-list > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 2px;
+  border-bottom: 1px solid #edf1ee;
+  color: #405348;
+  font-size: 14px;
+  font-weight: 700;
+}
+.sensor-settings-list > div:last-child {
+  border-bottom: 0;
+}
+.sensor-settings-list strong {
+  min-width: 34px;
+  padding: 5px 8px;
+  border-radius: 9px;
+  background: #eef5f0;
+  color: #176b3b;
+  text-align: center;
+  font-size: 12px;
+}
+.settings-helper-text {
+  margin: 10px 0 0;
+  color: var(--sene-muted, #718278);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* Separate Farm Settings screen */
+.farm-settings-page {
+  display: grid;
+  gap: 16px;
+  padding-bottom: 20px;
+}
+.settings-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  justify-self: start;
+  padding: 10px 4px;
+  border: 0;
+  background: transparent;
+  color: #176b3b;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+.settings-back-button svg {
+  transform: rotate(180deg);
+}
+.settings-card {
+  padding: 18px;
+  border-radius: 20px;
+  background: #fff;
+}
+.settings-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.settings-icon {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: #176b3b;
+  background: #eaf5ed;
+}
+.sensor-settings-icon {
+  color: #2875a8;
+  background: #eaf4fb;
+}
+.settings-card-heading h2 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 900;
+}
+.settings-card-heading p {
+  margin: 0;
+  color: #718278;
+  font-size: 13px;
+}
+.settings-status-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 20px 0 14px;
+  color: #53665a;
+  font-size: 13px;
+  font-weight: 750;
+}
+.settings-status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #d99b36;
+}
+.settings-status-dot.is-configured {
+  background: #279653;
+}
+.settings-primary-button {
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #207b46, #125b32);
+  color: white;
+  font: inherit;
+  font-weight: 850;
+  cursor: pointer;
+}
+.sensor-settings-list {
+  display: grid;
+  margin-top: 16px;
+}
+.sensor-settings-list > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 2px;
+  border-bottom: 1px solid #edf1ee;
+  color: #405348;
+  font-size: 14px;
+  font-weight: 700;
+}
+.sensor-settings-list strong {
+  padding: 5px 9px;
+  border-radius: 9px;
+  background: #eef5f0;
+  color: #176b3b;
+}
+.settings-helper-text {
+  margin: 12px 0 0;
+  color: #718278;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* SeneSmart Farm Settings - premium layout */
+.farm-settings-page {
+  display: grid;
+  gap: 20px;
+  padding: 4px 0 28px;
+}
+
+.farm-settings-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  width: fit-content;
+  padding: 10px 14px;
+  border: 1px solid #e0ebe3;
+  border-radius: 12px;
+  background: #fff;
+  color: #176b3b;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.farm-settings-card {
+  padding: 22px;
+  border: 1px solid #e5eee7;
+  border-radius: 22px;
+  background: linear-gradient(145deg, #ffffff 65%, #f5faf6);
+  box-shadow: 0 10px 30px rgba(24, 61, 39, .07);
+}
+
+.farm-settings-heading {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.farm-settings-icon {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  flex: 0 0 54px;
+  border-radius: 17px;
+  color: #176b3b;
+  background: #e8f5eb;
+}
+
+.farm-settings-heading h2 {
+  margin: 0 0 5px;
+  color: #183326;
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: -.35px;
+}
+
+.farm-settings-heading p {
+  margin: 0;
+  color: #718278;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.farm-boundary-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0;
+  padding: 13px 15px;
+  border: 1px solid #e4eee6;
+  border-radius: 13px;
+  background: #f7faf7;
+  color: #405348;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.farm-settings-status-dot {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 10px;
+  border-radius: 50%;
+  background: #d99b36;
+}
+
+.farm-settings-status-dot.saved {
+  background: #279653;
+  box-shadow: 0 0 0 4px rgba(39, 150, 83, .12);
+}
+
+.farm-settings-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 54px;
+  padding: 13px 18px;
+  border: 0;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #23834b, #125b32);
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 850;
+  cursor: pointer;
+  box-shadow: 0 7px 17px rgba(23, 107, 59, .2);
+}
+
+.farm-settings-primary:active,
+.farm-settings-back:active {
+  transform: scale(.985);
+}
+
+.farm-settings-sensor-list {
+  display: grid;
+  gap: 11px;
+  margin-top: 20px;
+}
+
+.farm-settings-sensor {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid #e8eee9;
+  border-radius: 16px;
+  background: #fff;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.farm-settings-sensor:focus-within {
+  border-color: #9ac9a7;
+  box-shadow: 0 0 0 3px rgba(39, 150, 83, .08);
+}
+
+.farm-settings-sensor-icon {
+  display: grid;
+  place-items: center;
+  width: 43px;
+  height: 43px;
+  flex: 0 0 43px;
+  border-radius: 13px;
+  color: #2875a8;
+  background: #edf6fb;
+}
+
+.farm-settings-sensor > div:nth-child(2) {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 4px;
+}
+
+.farm-settings-sensor strong {
+  color: #233d2d;
+  font-size: 14px;
+  font-weight: 850;
+}
+
+.farm-settings-sensor small {
+  color: #829087;
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.farm-settings-location {
+  color: #a27631;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.farm-settings-hint {
+  margin: 17px 2px 0;
+  color: #718278;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.farm-settings-place-button {
+  min-width: 66px;
+  padding: 9px 12px;
+  border: 1px solid #cfe4d4;
+  border-radius: 11px;
+  background: #edf7ef;
+  color: #176b3b;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.farm-settings-place-button:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+@media (min-width: 700px) {
+  .farm-settings-page {
+    gap: 22px;
+  }
+
+  .farm-settings-card {
+    padding: 26px;
+  }
+
+  .farm-settings-heading h2 {
+    font-size: 21px;
+  }
+
+  .farm-settings-sensor {
+    padding: 16px 18px;
+  }
+}
+
+/* Dedicated full-screen farm boundary drawing */
+.app:has(.map-drawing-workspace) {
+  min-height: 100dvh;
+  padding: 0;
+  background: #f5f8f5;
+}
+
+.app:has(.map-drawing-workspace) .content {
+  width: 96% !important;
+  max-width: 1400px !important;
+  margin: 16px auto !important;
+}
+
+.map-drawing-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: calc(100dvh - 32px);
+}
+
+.map-drawing-header {
+  padding: 16px 20px;
+  background: white;
+  border: 1px solid #e4ece5;
+  border-radius: 16px;
+}
+
+.map-drawing-header h2 {
+  margin: 0 0 6px;
+  color: #183326;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.map-drawing-header p {
+  margin: 0 0 10px;
+  color: #718278;
+  font-size: 14px;
+}
+
+.map-drawing-header strong {
+  color: #176b3b;
+  font-size: 14px;
+}
+
+.map-drawing-area {
+  width: 100%;
+  max-width: none;
+  flex: 1;
+  min-height: 380px;
+  aspect-ratio: auto;
+  margin: 0;
+  background: #edf5ed;
+  border: 2px dashed #a9c9ae;
+  border-radius: 18px;
+  overflow: hidden;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.map-drawing-area .farm-boundary-line {
+  stroke-width: 2.5;
+}
+
+.map-drawing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.map-drawing-actions button {
+  flex: 1;
+  min-width: 100px;
+  min-height: 52px;
+  border: 1px solid #dce9df;
+  border-radius: 12px;
+  background: white;
+  color: #245b39;
+  font-size: 15px;
+  font-weight: 850;
+}
+
+.map-drawing-actions button[data-action="finish-map-drawing"] {
+  background: #176b3b;
+  border-color: #176b3b;
+  color: white;
+}
+
+.map-drawing-actions button:disabled {
+  opacity: .4;
+}
+
+@media (max-width: 600px) {
+  .app:has(.map-drawing-workspace) .content {
+    width: 94% !important;
+    margin: 10px auto !important;
+  }
+
+  .map-drawing-area {
+    min-height: 340px;
+  }
+
+  .map-drawing-actions {
+    gap: 8px;
+  }
+
+  .map-drawing-actions button {
+    min-width: 85px;
+    font-size: 13px;
+  }
+}
+
+/* Large Paint-style farm drawing canvas */
+.app:has(.map-drawing-workspace) {
+  width: 100%;
+  height: 100dvh;
+  min-height: 100dvh;
+  overflow: hidden;
+  padding: 0;
+  background: #eef2ee;
+}
+
+.app:has(.map-drawing-workspace) .content {
+  display: flex;
+  flex-direction: column;
+  width: 100% !important;
+  max-width: none !important;
+  height: 100dvh;
+  min-height: 0;
+  margin: 0 !important;
+  padding: 10px;
+}
+
+.map-drawing-workspace {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  gap: 10px;
+}
+
+.map-drawing-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+  padding: 10px 16px;
+}
+
+.map-drawing-header h2,
+.map-drawing-header p {
+  margin: 0;
+}
+
+.map-drawing-header p {
+  flex: 1 1 240px;
+}
+
+.map-drawing-area {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: auto;
+  margin: 0;
+  border: 1px solid #c5d0c7;
+  border-radius: 8px;
+  background-color: white;
+  background-image:
+    linear-gradient(to right, rgba(72,105,80,.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(72,105,80,.12) 1px, transparent 1px),
+    linear-gradient(to right, rgba(72,105,80,.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(72,105,80,.06) 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+  overflow: hidden;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.map-drawing-area .farm-boundary {
+  pointer-events: none;
+}
+
+.map-drawing-area .farm-boundary-line {
+  fill: none;
+  stroke: #176b3b;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.map-drawing-actions {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 10px;
+  padding: 0;
+}
+
+.map-drawing-actions button {
+  min-height: 48px;
+}
+
+@media (max-width: 600px) {
+  .app:has(.map-drawing-workspace) .content {
+    padding: 7px;
+  }
+
+  .map-drawing-workspace {
+    gap: 7px;
+  }
+
+  .map-drawing-header {
+    padding: 9px;
+  }
+
+  .map-drawing-area {
+    min-height: 0;
+  }
+}
+
+/* Paint editor toolbar */
+.paint-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px;
+  background: white;
+  border: 1px solid #dce6dd;
+  border-radius: 12px;
+}
+
+.paint-toolbar button {
+  min-height: 42px;
+  padding: 8px 16px;
+  border: 1px solid #dce6dd;
+  border-radius: 9px;
+  background: #f8faf8;
+  color: #294b35;
+  font-weight: 750;
+}
+
+.paint-toolbar button.active {
+  background: #176b3b;
+  color: white;
+  border-color: #176b3b;
+}
+
+.paint-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+
+.paint-options label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #35513d;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.paint-options input,
+.paint-options select {
+  min-height: 38px;
+  padding: 6px 10px;
+  border: 1px solid #d5e1d7;
+  border-radius: 8px;
+  background: white;
+}
+
+.paint-canvas {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .paint-toolbar button {
+    flex: 1 1 28%;
+    padding: 8px;
+    font-size: 12px;
+  }
+}
+
+
+/* Sensor placement and touch dragging */
+.sensor-placement-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 14px 16px;
+  border: 1px solid #b9ddc3;
+  border-radius: 14px;
+  background: #edf8ef;
+}
+.sensor-placement-banner strong {
+  color: #176b3b;
+  font-size: 14px;
+  font-weight: 850;
+}
+.sensor-placement-banner p {
+  margin: 4px 0 0;
+  color: #587362;
+  font-size: 12px;
+}
+.sensor-placement-banner button {
+  flex: 0 0 auto;
+  padding: 9px 13px;
+  border: 1px solid #cfe4d4;
+  border-radius: 10px;
+  background: white;
+  color: #176b3b;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+}
+.simple-sensor-marker {
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.simple-sensor-marker:active {
+  cursor: grabbing;
+}
+
+
+/* Main Farm Map canvas: match the Map Editor */
+.simple-map-area.farm-map-canvas {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 100%;
+  max-width: none;
+  height: clamp(380px, 65vh, 720px);
+  min-height: 380px;
+  aspect-ratio: auto;
+  margin: 0;
+  border: 1px solid #c5d0c7;
+  border-radius: 8px;
+  background-color: white;
+  background-image:
+    linear-gradient(to right, rgba(72,105,80,.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(72,105,80,.12) 1px, transparent 1px),
+    linear-gradient(to right, rgba(72,105,80,.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(72,105,80,.06) 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.farm-map-canvas .farm-boundary {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.farm-map-canvas .simple-sensor-marker {
+  touch-action: none;
+}
+
+@media (max-width: 600px) {
+  .simple-map-area.farm-map-canvas {
+    height: 60vh;
+    min-height: 340px;
+  }
+}
