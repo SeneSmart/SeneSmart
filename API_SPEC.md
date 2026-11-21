@@ -36,7 +36,21 @@ Example:
 
 The actual IP address and network configuration must be agreed upon by the hardware team.
 
-## 4. Sensor Readings
+## 4. Hardware Sensor Mapping
+
+The ESP32 must support these five sensor channels:
+
+| Sensor ID | Sensor | Measurement |
+|---|---|---|
+| S1 | Soil moisture sensor | Soil moisture percentage |
+| S2 | Temperature sensor | Temperature in °C |
+| S3 | Humidity sensor | Relative humidity in % |
+| S4 | Distance sensor | Water-tank level percentage |
+| S5 | Soil pH sensor | Soil pH value |
+
+The ESP32 is responsible for reading, validating and processing all sensor measurements before sending them to the frontend.
+
+## 5. Sensor Readings
 
 ### GET /sensors/readings/latest
 
@@ -46,17 +60,86 @@ Example response:
 
     {
       "device_id": "SEN-001",
-      "soil_moisture": 68.5,
-      "temperature": 27.4,
-      "humidity": 72,
-      "water_level": 85,
-      "soil_ph": 6.5,
+      "sensors": {
+        "S1": {
+          "name": "soil_moisture",
+          "value": 68.5,
+          "unit": "%"
+        },
+        "S2": {
+          "name": "temperature",
+          "value": 27.4,
+          "unit": "°C"
+        },
+        "S3": {
+          "name": "humidity",
+          "value": 72,
+          "unit": "%"
+        },
+        "S4": {
+          "name": "water_level",
+          "value": 85,
+          "unit": "%",
+          "distance_cm": 12.5
+        },
+        "S5": {
+          "name": "soil_ph",
+          "value": 6.5,
+          "unit": "pH"
+        }
+      },
       "timestamp": "2026-11-20T16:00:00Z"
     }
 
-All measurement values are examples. Actual units, calibration and supported ranges must be confirmed by the hardware team.
+All values above are examples.
 
-## 5. Device Status
+### 4.1 Water Level Calculation — S4
+
+S4 must use a distance-measuring sensor installed above the water tank.
+
+The sensor measures the distance between its mounting position and the water surface.
+
+The ESP32 must convert that distance into a water-level percentage.
+
+Required calibration settings:
+
+- `empty_distance_cm`: measured distance when the tank is empty.
+- `full_distance_cm`: measured distance when the tank is full.
+
+Calculation:
+
+    water_level_percent =
+      (empty_distance_cm - measured_distance_cm)
+      / (empty_distance_cm - full_distance_cm) * 100
+
+The result must be limited to the range 0–100%.
+
+Example:
+
+    empty_distance_cm = 100
+    full_distance_cm = 10
+    measured_distance_cm = 23.5
+
+    water_level_percent = 85%
+
+The ESP32 must:
+- Read the distance sensor.
+- Filter invalid or unstable measurements.
+- Calculate the water-level percentage.
+- Report both the calculated percentage and raw distance.
+- Report a sensor error if a valid measurement cannot be obtained.
+
+The tank calibration values must be configurable for the actual tank. Do not hardcode the example values.
+
+The frontend should display the calculated water-level percentage. It should not need to calculate the percentage itself.
+
+### 4.2 Sensor Error Reporting
+
+Each sensor should report whether its reading is valid.
+
+If a sensor fails, the ESP32 should report its status as `error` rather than presenting an invalid measurement as a normal reading.
+
+## 6. Device Status
 
 ### GET /device/status
 
@@ -72,7 +155,7 @@ Example response:
       "ai_available": true
     }
 
-## 6. Pump Control
+## 7. Pump Control
 
 ### POST /pump/control
 
@@ -102,7 +185,7 @@ Supported states:
 
 The ESP32 must report the actual pump state rather than assuming that every command succeeded.
 
-## 7. Irrigation Automation
+## 8. Irrigation Automation
 
 The frontend is intended to support:
 
@@ -130,7 +213,7 @@ Example request:
 
 This endpoint is proposed and requires hardware team approval.
 
-## 8. Sene AI
+## 9. Sene AI
 
 Sene AI is intended to run locally on the ESP32 without depending on a cloud AI service.
 
@@ -154,7 +237,7 @@ Example response:
 
 The ESP32 team must determine the AI model, supported questions, memory requirements and response format.
 
-## 9. Voice Assistant
+## 10. Voice Assistant
 
 Proposed voice interaction:
 
@@ -167,7 +250,7 @@ Proposed voice interaction:
 
 The exact voice-processing responsibilities and offline capabilities must be agreed upon by both teams.
 
-## 10. Communication
+## 11. Communication
 
 The initial proposal is HTTP over the local Wi-Fi network.
 
@@ -175,7 +258,7 @@ The frontend may request updated sensor readings periodically. A five-second int
 
 The hardware team may recommend WebSockets or another suitable method.
 
-## 11. Error Responses
+## 12. Error Responses
 
 Example:
 
@@ -193,7 +276,7 @@ Suggested error categories:
 - PUMP_CONTROL_FAILED
 - AI_UNAVAILABLE
 
-## 12. Security
+## 13. Security
 
 The hardware team should define:
 
@@ -202,7 +285,7 @@ The hardware team should define:
 - Protection against unauthorized local network access.
 - Safe handling of invalid or repeated commands.
 
-## 13. Hardware Team Responsibilities
+## 14. Hardware Team Responsibilities
 
 The hardware team is responsible for:
 
@@ -214,7 +297,7 @@ The hardware team is responsible for:
 - Local API implementation.
 - Communication and security.
 
-## 14. Frontend Team Responsibilities
+## 15. Frontend Team Responsibilities
 
 The frontend team is responsible for:
 
@@ -227,7 +310,7 @@ The frontend team is responsible for:
 - Microphone and spoken response interface.
 - Integration with the agreed ESP32 API.
 
-## 15. Items Requiring Team Agreement
+## 16. Items Requiring Team Agreement
 
 Before implementation, both teams must confirm:
 
