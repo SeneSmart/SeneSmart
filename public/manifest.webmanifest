@@ -1,0 +1,19 @@
+{
+  "name": "SeneSmart Farm Assistant",
+  "short_name": "SeneSmart",
+  "description": "Offline smart farm monitoring and irrigation control",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f5f7f5",
+  "theme_color": "#f5f7f5",
+  "icons": [
+    {
+      "src": "/senesmart-logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

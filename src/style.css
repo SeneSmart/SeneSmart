@@ -1,7 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Arial', 'Helvetica Neue', sans-serif;
   color: #17291e;
   background: #f5f7f5;
   font-synthesis: none;
@@ -3396,13 +3395,10 @@ select {
   font-weight: 800;
 }
 .simple-sensor-marker {
-  touch-action: none;
-  cursor: grab;
+  touch-action: manipulation;
+  cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
-}
-.simple-sensor-marker:active {
-  cursor: grabbing;
 }
 
 
@@ -3447,4 +3443,651 @@ select {
     height: 60vh;
     min-height: 340px;
   }
+}
+
+/* Premium icon presentation */
+.bottom-nav button svg {
+  width: 25px !important;
+  height: 25px !important;
+  stroke-width: 2 !important;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform .2s ease;
+}
+
+.bottom-nav button.nav-active svg {
+  transform: translateY(-2px);
+  stroke-width: 2.1 !important;
+}
+
+.sensor-unconfigured {
+  min-height: 132px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 12px;
+}
+
+.sensor-unconfigured-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: #0f766e;
+  background: rgba(20, 184, 166, 0.10);
+}
+
+.sensor-unconfigured strong {
+  font-size: 13px;
+  color: var(--text-primary, #1f2937);
+}
+
+.sensor-unconfigured span {
+  max-width: 190px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-secondary, #64748b);
+}
+
+
+/* Centered overall farm health card below the AI controls */
+.farm-health-card {
+  width: min(calc(100% - 28px), 390px);
+  margin: 104px auto 22px;
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  text-align: center;
+  border: 1px solid #cfe8d6;
+  border-radius: 20px;
+  background: #f0faf3;
+  box-shadow: 0 0 12px rgba(22, 132, 71, .22), 0 0 28px rgba(22, 132, 71, .16), 0 6px 18px rgba(30, 110, 60, .14);
+}
+
+.farm-health-card span {
+  color: #557461;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.1px;
+}
+
+.farm-health-card strong {
+  font-size: 22px;
+  font-weight: 1000;
+  letter-spacing: .2px;
+}
+
+.farm-health-card.good strong {
+  color: #168447;
+}
+
+.farm-health-card.warning {
+  background: #fff8e9;
+  border-color: #f0d99e;
+}
+
+.farm-health-card.warning strong {
+  color: #a66a0a;
+}
+
+.farm-health-card.danger {
+  background: #fff0ef;
+  border-color: #f1c2bd;
+}
+
+.farm-health-card.danger strong {
+  color: #c0392b;
+}
+
+/* Farm Health card - clickable Analysis shortcut */
+.farm-health-card {
+  cursor: pointer;
+  width: min(calc(100% - 28px), 410px);
+  padding: 25px 26px;
+  transition: transform .2s ease, box-shadow .2s ease;
+  font-family: inherit;
+}
+
+.farm-health-card:hover {
+  transform: translateY(-3px);
+}
+
+.farm-health-card:active {
+  transform: scale(.98);
+}
+
+.farm-health-card small {
+  font-size: 12px;
+  font-weight: 800;
+  margin-top: 5px;
+  color: #557461;
+}
+
+.analysis-page {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding-bottom: 20px;
+}
+
+.analysis-intro {
+  padding: 24px;
+  text-align: center;
+}
+
+.analysis-icon {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 14px;
+  border-radius: 18px;
+  background: #eaf6ee;
+  color: #21844c;
+}
+
+.analysis-intro h2 {
+  margin: 0 0 8px;
+  font-size: 21px;
+}
+
+.analysis-intro p {
+  margin: 0;
+  color: #829087;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Five evenly spaced navigation tabs */
+.bottom-nav {
+  gap: 0 !important;
+}
+
+.bottom-nav button {
+  flex: 1;
+  min-width: 0;
+}
+
+
+/* Plain-language farm health explanations */
+.analysis-danger-intro {
+  border: 1px solid #f1c2bd;
+  background: #fff0ef;
+}
+
+.analysis-danger-intro h2 {
+  color: #c0392b;
+}
+
+.analysis-reason {
+  padding: 20px;
+  border: 1px solid #f1c2bd;
+  border-radius: 18px;
+}
+
+.analysis-reason-top {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #c0392b;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .7px;
+}
+
+.analysis-warning-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  background: #fff0ef;
+  color: #c0392b;
+}
+
+.analysis-reason h3 {
+  margin: 14px 0 8px;
+  font-size: 18px;
+  font-weight: 900;
+  color: #24392d;
+}
+
+.analysis-reason > p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #59675e;
+}
+
+.analysis-action {
+  margin-top: 16px;
+  padding: 15px;
+  border-radius: 14px;
+  background: #f0faf3;
+  border: 1px solid #cfe8d6;
+}
+
+.analysis-action strong {
+  color: #168447;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .7px;
+}
+
+.analysis-action p {
+  margin: 7px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #244b34;
+  font-weight: 700;
+}
+
+
+/* Complete sensor analysis */
+.analysis-overall-status {
+  display: inline-flex;
+  margin-top: 15px;
+  padding: 8px 13px;
+  border-radius: 30px;
+  background: #eaf6ee;
+  color: #21844c;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .5px;
+}
+
+.analysis-overall-status.warning {
+  background: #fff5df;
+  color: #a66a12;
+}
+
+.analysis-overall-status.danger {
+  background: #fff0ef;
+  color: #c0392b;
+}
+
+.analysis-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 8px 2px 0;
+}
+
+.analysis-section-heading h2 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  color: #24392d;
+}
+
+.analysis-section-heading p {
+  margin: 0;
+  color: #829087;
+  font-size: 12px;
+}
+
+.analysis-section-heading > span {
+  color: #64806d;
+  font-size: 10px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.analysis-sensor-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.analysis-sensor-card {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid #dcebe0;
+  border-radius: 18px;
+  background: #fff;
+}
+
+.analysis-sensor-card.warning {
+  border-color: #f0dfb9;
+}
+
+.analysis-sensor-card.danger {
+  border-color: #f1c2bd;
+}
+
+.analysis-sensor-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.analysis-sensor-top h3 {
+  margin: 0 0 5px;
+  color: #24392d;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.analysis-sensor-top > div > span {
+  color: #89958d;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .6px;
+}
+
+.analysis-reading {
+  color: #24392d;
+  font-size: 20px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.analysis-condition {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 13px 0 10px;
+  padding: 7px 10px;
+  border-radius: 20px;
+  background: #eaf6ee;
+  color: #21844c;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.analysis-condition > span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.analysis-condition.warning {
+  background: #fff5df;
+  color: #a66a12;
+}
+
+.analysis-condition.danger {
+  background: #fff0ef;
+  color: #c0392b;
+}
+
+.analysis-sensor-card > p {
+  margin: 0;
+  color: #59675e;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.analysis-sensor-card .analysis-action {
+  margin-top: 13px;
+  padding: 12px;
+}
+
+.analysis-sensor-card .analysis-action p {
+  font-size: 12px;
+}
+
+.analysis-derived-note {
+  display: block;
+  margin-top: 11px;
+  color: #829087;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+@media (min-width: 700px) {
+  .analysis-sensor-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+/* Simple farmer-friendly Analysis page */
+.analysis-simple {
+  gap: 16px;
+}
+
+.analysis-simple-summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid #cfe8d6;
+  border-radius: 18px;
+  background: #f0faf3;
+}
+
+.analysis-simple-summary.warning {
+  border-color: #f0dfb9;
+  background: #fff9eb;
+}
+
+.analysis-simple-summary.danger {
+  border-color: #f1c2bd;
+  background: #fff3f1;
+}
+
+.analysis-simple-summary-icon {
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: #dff2e5;
+  color: #21844c;
+}
+
+.analysis-simple-summary.warning .analysis-simple-summary-icon {
+  background: #fff0cc;
+  color: #a66a12;
+}
+
+.analysis-simple-summary.danger .analysis-simple-summary-icon {
+  background: #ffe1dc;
+  color: #c0392b;
+}
+
+.analysis-simple-summary span {
+  color: #64806d;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .7px;
+}
+
+.analysis-simple-summary h2 {
+  margin: 5px 0 6px;
+  color: #24392d;
+  font-size: 19px;
+  line-height: 1.3;
+}
+
+.analysis-simple-summary p,
+.analysis-simple-heading p {
+  margin: 0;
+  color: #64736a;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.analysis-simple-heading {
+  margin: 2px 2px 0;
+}
+
+.analysis-simple-heading h2 {
+  margin: 0 0 5px;
+  color: #24392d;
+  font-size: 18px;
+}
+
+.analysis-simple-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 11px;
+}
+
+.analysis-simple-card {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid #dcebe0;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.analysis-simple-card.warning {
+  border-color: #f0dfb9;
+}
+
+.analysis-simple-card.danger {
+  border-color: #f1c2bd;
+}
+
+.analysis-simple-card.unavailable {
+  border-color: #e1e6e2;
+  background: #fafcfb;
+}
+
+.analysis-simple-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.analysis-simple-card-top h3 {
+  margin: 0 0 6px;
+  color: #24392d;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.analysis-simple-card-top > strong {
+  color: #24392d;
+  font-size: 18px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.analysis-simple-status {
+  display: inline-flex;
+  padding: 5px 9px;
+  border-radius: 20px;
+  background: #eaf6ee;
+  color: #21844c;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.analysis-simple-card.warning .analysis-simple-status {
+  background: #fff5df;
+  color: #a66a12;
+}
+
+.analysis-simple-card.danger .analysis-simple-status {
+  background: #fff0ef;
+  color: #c0392b;
+}
+
+.analysis-simple-card.unavailable .analysis-simple-status {
+  background: #edf0ee;
+  color: #68756d;
+}
+
+.analysis-simple-card > p {
+  margin: 12px 0 0;
+  color: #59675e;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.analysis-simple-advice {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f0faf3;
+}
+
+.analysis-simple-card.warning .analysis-simple-advice {
+  background: #fff9eb;
+}
+
+.analysis-simple-card.danger .analysis-simple-advice {
+  background: #fff3f1;
+}
+
+.analysis-simple-advice strong {
+  color: #39764d;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .5px;
+}
+
+.analysis-simple-card.warning .analysis-simple-advice strong {
+  color: #a66a12;
+}
+
+.analysis-simple-card.danger .analysis-simple-advice strong {
+  color: #c0392b;
+}
+
+.analysis-simple-advice p {
+  margin: 5px 0 0;
+  color: #344c3b;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.analysis-simple-card > small {
+  display: block;
+  margin-top: 10px;
+  color: #829087;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+@media (min-width: 700px) {
+  .analysis-simple-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+/* Offline Vosk voice input */
+.sene-speak-button.is-listening {
+  background: linear-gradient(145deg, #b42318, #e04438) !important;
+  border-color: #b42318 !important;
+  animation: sene-mic-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes sene-mic-pulse {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(180, 35, 24, .2);
+  }
+  50% {
+    box-shadow: 0 0 0 9px rgba(220, 65, 55, .16);
+  }
+}
+
+.sene-voice-status {
+  margin: 10px 16px 4px;
+  color: #168c4b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.sene-voice-partial {
+  margin: 4px 16px 10px;
+  color: #53715e;
+  font-size: 13px;
+  font-style: italic;
+  min-height: 18px;
 }

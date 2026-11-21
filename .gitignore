@@ -25,3 +25,13 @@ dist-ssr
 
 # Archived files excluded from GitHub
 /backups/
+
+# Local backups and temporary files
+*.bak
+*.backup*
+*.before-*
+*.pre-*
+*.wording-backup-*
+*.old
+*.zip
+/tmp/
